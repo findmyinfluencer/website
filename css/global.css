@@ -1,0 +1,583 @@
+/* ==========================================================================
+   findmyinfluencer — global.css
+   Design tokens, reset, typography, layout primitives, header & footer.
+   Theme reference: htmlstream.com Front dashboard landing page.
+   ========================================================================== */
+
+:root {
+  /* Colors */
+  --fmi-primary: #3366ff;
+  --fmi-primary-dark: #2551d9;
+  --fmi-primary-light: #eaf0ff;
+  --fmi-heading: #1e2022;
+  --fmi-body: #677788;
+  --fmi-muted: #8c98a4;
+  --fmi-border: #e7eaf3;
+  --fmi-light: #f8fafd;
+  --fmi-white: #ffffff;
+  --fmi-dark-bg: #0b1727;
+  --fmi-warning: #ffb64c;
+  --fmi-success: #00c9a7;
+  --fmi-danger: #ff5a5f;
+
+  /* Typography */
+  --fmi-font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --fmi-fs-base: 16px;
+
+  /* Layout */
+  --fmi-container: 1240px;
+  --fmi-radius-sm: 6px;
+  --fmi-radius: 10px;
+  --fmi-radius-lg: 16px;
+  --fmi-shadow-sm: 0 2px 6px rgba(20, 34, 74, 0.06);
+  --fmi-shadow: 0 10px 30px rgba(20, 34, 74, 0.08);
+  --fmi-shadow-lg: 0 20px 50px rgba(20, 34, 74, 0.12);
+  --fmi-header-h: 76px;
+}
+
+/* ---- Reset ---- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  font-family: var(--fmi-font);
+  font-size: var(--fmi-fs-base);
+  line-height: 1.7;
+  color: var(--fmi-body);
+  background: var(--fmi-white);
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 12px;
+  font-weight: 700;
+  color: var(--fmi-heading);
+  line-height: 1.3;
+}
+
+p {
+  margin: 0 0 16px;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+svg {
+  display: block;
+}
+
+/* ---- Layout helpers ---- */
+.container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--fmi-container);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section {
+  position: relative;
+  padding: 96px 0;
+  background-image:
+    radial-gradient(rgba(236, 72, 153, 0.14) 1.6px, transparent 1.7px),
+    radial-gradient(rgba(59, 130, 246, 0.14) 1.6px, transparent 1.7px),
+    radial-gradient(rgba(16, 185, 129, 0.14) 1.6px, transparent 1.7px),
+    radial-gradient(rgba(245, 158, 11, 0.14) 1.6px, transparent 1.7px);
+  background-position: 0 0, 22px 16px, 46px 4px, 12px 34px;
+  background-size: 64px 64px;
+}
+
+.section-divider {
+  position: relative;
+  z-index: 1;
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, var(--fmi-border) 30%, var(--fmi-border) 70%, transparent);
+}
+
+.section-header {
+  max-width: 640px;
+  margin: 0 auto 56px;
+  text-align: center;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fmi-primary);
+  background: var(--fmi-primary-light);
+  padding: 6px 14px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+
+.section-desc {
+  font-size: 17px;
+  color: var(--fmi-body);
+  margin-bottom: 0;
+}
+
+.text-primary {
+  color: var(--fmi-primary);
+}
+
+.highlight {
+  position: relative;
+  white-space: nowrap;
+  background-image: linear-gradient(90deg, #3366ff, #ec4899, #8b5cf6, #3366ff);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: highlight-shift 5s ease-in-out infinite;
+}
+
+@keyframes highlight-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: 16px;
+  background: var(--fmi-primary);
+  color: var(--fmi-white);
+  padding: 10px 18px;
+  border-radius: var(--fmi-radius-sm);
+  z-index: 1000;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+/* ---- Buttons ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px 26px;
+  border-radius: var(--fmi-radius-sm);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--fmi-primary);
+  color: var(--fmi-white);
+  box-shadow: 0 6px 16px rgba(51, 102, 255, 0.28);
+}
+
+.btn-primary:hover {
+  background: var(--fmi-primary-dark);
+  box-shadow: 0 8px 20px rgba(51, 102, 255, 0.36);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--fmi-heading);
+  border-color: var(--fmi-border);
+}
+
+.btn-outline:hover {
+  border-color: var(--fmi-primary);
+  color: var(--fmi-primary);
+}
+
+.btn-white {
+  background: var(--fmi-white);
+  color: var(--fmi-primary);
+}
+
+.btn-white:hover {
+  background: var(--fmi-light);
+  transform: translateY(-1px);
+}
+
+.btn-sm {
+  padding: 9px 18px;
+  font-size: 14px;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* ---- Header ---- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  height: var(--fmi-header-h);
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: saturate(180%) blur(10px);
+  border-bottom: 1px solid var(--fmi-border);
+  transition: box-shadow 0.2s ease;
+}
+
+.site-header.is-scrolled {
+  box-shadow: 0 4px 20px rgba(20, 34, 74, 0.08);
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--fmi-heading);
+  flex-shrink: 0;
+}
+
+.brand img {
+  width: 240px;
+}
+
+.brand .brand-my {
+  color: var(--fmi-primary);
+}
+
+.nav-main {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 auto;
+}
+
+.nav-main a {
+  padding: 10px 16px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--fmi-body);
+  border-radius: var(--fmi-radius-sm);
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.nav-main a:hover,
+.nav-main a[aria-current="page"] {
+  color: var(--fmi-primary);
+  background: var(--fmi-primary-light);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.nav-mobile-actions {
+  display: none;
+}
+
+/* .nav-main a sets a muted color for plain nav links; these are buttons
+   nested inside the same nav, so restate their intended colors to win. */
+.nav-mobile-actions .btn-primary {
+  color: var(--fmi-white);
+}
+
+.nav-mobile-actions .btn-outline {
+  color: var(--fmi-heading);
+  text-align: center;
+}
+
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--fmi-border);
+  border-radius: var(--fmi-radius-sm);
+  background: var(--fmi-white);
+}
+
+.nav-toggle span,
+.nav-toggle span::before,
+.nav-toggle span::after {
+  content: "";
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--fmi-heading);
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.nav-toggle span::before {
+  position: absolute;
+  top: -6px;
+}
+
+.nav-toggle span::after {
+  position: absolute;
+  top: 6px;
+}
+
+/* ---- Footer ---- */
+.site-footer {
+  position: relative;
+  background-color: var(--fmi-dark-bg);
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.08) 1.6px, transparent 1.7px),
+    radial-gradient(rgba(255, 255, 255, 0.05) 1.6px, transparent 1.7px);
+  background-position: 0 0, 24px 18px;
+  background-size: 46px 46px, 46px 46px;
+  color: #9fb0c3;
+  padding: 72px 0 0;
+}
+
+.site-footer::before,
+.site-footer::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+/* Matches #campaigns::after in common.css (Pair E) so the glow hands off
+   continuously from the last content section into the footer. */
+.site-footer::before {
+  width: 260px;
+  height: 260px;
+  top: -90px;
+  left: -60px;
+  background: rgba(59, 130, 246, 0.22);
+}
+
+.site-footer::after {
+  width: 240px;
+  height: 240px;
+  bottom: 40px;
+  right: 6%;
+  background: rgba(236, 72, 153, 0.22);
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 56px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-brand .brand {
+  color: var(--fmi-white);
+}
+
+.footer-brand p {
+  margin: 16px 0 20px;
+  max-width: 300px;
+  font-size: 15px;
+}
+
+.footer-heading {
+  color: var(--fmi-white);
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.footer-links li {
+  margin-bottom: 12px;
+}
+
+.footer-links a {
+  font-size: 15px;
+  transition: color 0.15s ease;
+}
+
+.footer-links a:hover {
+  color: var(--fmi-white);
+}
+
+.social-links {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.social-links a {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.social-links a:hover {
+  background: var(--fmi-primary);
+  color: var(--fmi-white);
+}
+
+.social-links a.c-instagram:hover { background: linear-gradient(135deg, #f58529, #dd2a7b 55%, #8134af); }
+.social-links a.c-youtube:hover { background: #ff0000; }
+.social-links a.c-linkedin:hover { background: #0a66c2; }
+.social-links a.c-x:hover { background: #000000; }
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 16px;
+  padding: 24px 0;
+  font-size: 14px;
+  flex-wrap: wrap;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 1080px) {
+  .brand img {
+    width: 220px;
+  }
+  .nav-main a:first-child{
+    display: none;
+  }
+}
+@media (max-width: 991px) {
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 991px) {
+  .brand img {
+    width: 200px;
+  }
+  .nav-main a:first-child{
+    display: block;
+  }
+  .nav-main {
+    position: fixed;
+    inset: var(--fmi-header-h) 0 0 0;
+    height: calc(100vh - var(--fmi-header-h));
+    background: var(--fmi-white);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px;
+    gap: 4px;
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+    overflow-y: auto;
+  }
+
+  .nav-main.is-open {
+    transform: translateX(0);
+  }
+
+  .nav-main a {
+    padding: 14px 16px;
+    font-size: 17px;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+  }
+
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 0 0 90px;
+  }
+  .section-divider{
+    display: none;
+  }
+  .section-title {
+    font-size: 32px;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+@media (max-width: 550px) {
+  .header-actions .btn-outline,
+  .header-actions .btn-primary {
+    display: none;
+  }
+  .brand img {
+    width: 250px;
+  }
+  .nav-mobile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--fmi-border);
+  }
+}

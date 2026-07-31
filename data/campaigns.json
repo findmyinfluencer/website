@@ -1,0 +1,68 @@
+[
+  {
+    "brandInitials": "EF",
+    "brandName": "EverFit365",
+    "title": "30-Day Fitness Challenge Content",
+    "theme": "theme-orange",
+    "description": "Document a 30-day home workout challenge using our training plans. Authentic progress Reels and honest reviews preferred over polished studio shots.",
+    "tags": ["Fitness", "Reels", "Challenge"],
+    "budget": "₹12K – ₹65K",
+    "daysLeft": "5 days left",
+    "applied": "14 Applied"
+  },
+  {
+    "brandInitials": "GS",
+    "brandName": "Gannet Studio",
+    "title": "Behind-the-Scenes Studio Content",
+    "theme": "theme-purple",
+    "description": "Give your audience a behind-the-scenes look at a real photoshoot at our studio, from setup to final shot. Great for photography and creative-process niches.",
+    "tags": ["Creative", "BTS", "Photography"],
+    "budget": "₹8K – ₹40K",
+    "daysLeft": "7 days left",
+    "applied": "6 Applied"
+  },
+  {
+    "brandInitials": "HE",
+    "brandName": "Hapli Earth",
+    "title": "Sustainable Living Story Series",
+    "theme": "theme-green",
+    "description": "Create a 3-part Story series on switching to our eco-friendly, plastic-free everyday essentials. Genuine before/after and daily-routine content preferred.",
+    "tags": ["Sustainability", "Lifestyle", "Stories"],
+    "budget": "₹10K – ₹55K",
+    "daysLeft": "3 days left",
+    "applied": "19 Applied"
+  },
+  {
+    "brandInitials": "MN",
+    "brandName": "MeetNow",
+    "title": "App Launch Awareness Reels",
+    "theme": "theme-blue",
+    "description": "Help launch our new app in your city with a relatable Reel showing how you use it to connect and meet up with friends. Casual, un-scripted tone works best.",
+    "tags": ["App", "Tech", "Reels"],
+    "budget": "₹15K – ₹75K",
+    "daysLeft": "4 days left",
+    "applied": "11 Applied"
+  },
+  {
+    "brandInitials": "SS",
+    "brandName": "SS Property Consultant",
+    "title": "Chennai Property Walkthroughs",
+    "theme": "theme-teal",
+    "description": "Walk your audience through a curated Chennai property listing, covering neighbourhood highlights and what to look for as a first-time buyer.",
+    "tags": ["Real Estate", "Walkthrough", "Chennai"],
+    "budget": "₹18K – ₹90K",
+    "daysLeft": "6 days left",
+    "applied": "9 Applied"
+  },
+  {
+    "brandInitials": "TC",
+    "brandName": "The Only Couple",
+    "title": "Real Couple Content Collab",
+    "theme": "theme-pink",
+    "description": "Feature our couple merchandise in your everyday content with your partner. Looking for genuine, relatable moments over staged product shots.",
+    "tags": ["Lifestyle", "Couples", "Reels"],
+    "budget": "₹9K – ₹48K",
+    "daysLeft": "8 days left",
+    "applied": "16 Applied"
+  }
+]

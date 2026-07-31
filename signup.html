@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up — Find My Influencer</title>
+  <meta name="description"
+    content="Join Find My Influencer as a brand looking for creators or an influencer looking for brand collaborations.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.findmyinfluencer.com/signup.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Find My Influencer">
+  <meta property="og:title" content="Sign Up — Find My Influencer">
+  <meta property="og:description"
+    content="Join as a brand looking for creators or an influencer looking for brand collaborations.">
+  <meta property="og:url" content="https://www.findmyinfluencer.com/signup.html">
+  <meta property="og:image" content="/images/favicon-512.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/svg+xml" href="images/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    referrerpolicy="no-referrer">
+
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="brand" aria-label="findmyinfluencer home">
+        <img src="images/logo-dark.png" alt="findmyinfluencer logo">
+      </a>
+
+      <nav class="nav-main" id="primary-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="find-influencer.html">Find Influencer</a>
+        <a href="campaigns.html">Campaigns</a>
+        <a href="blog.html">Blog</a>
+        <a href="contact.html">Contact</a>
+
+        <div class="nav-mobile-actions">
+          <a href="login.html" class="btn btn-outline btn-block">Log In</a>
+          <a href="signup.html" class="btn btn-primary btn-block" aria-current="page">Join for Free</a>
+        </div>
+      </nav>
+
+      <div class="header-actions">
+        <a href="login.html" class="btn btn-outline btn-sm">Log In</a>
+        <a href="signup.html" class="btn btn-primary btn-sm" aria-current="page">Join for Free</a>
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primary-nav">
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- Page hero -->
+    <section class="page-hero">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="index.html">Home</a>
+          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+          <span>Sign Up</span>
+        </div>
+        <h1>Join <span class="highlight">Find My Influencer</span></h1>
+        <p>Tell us a bit about yourself and we'll be in touch. Free for both brands and creators.</p>
+      </div>
+    </section>
+
+
+    <section class="section section-flush-top">
+      <div class="container">
+        <div class="signup-card-wrap">
+          <div class="contact-form-card">
+            <div class="type-toggle" id="typeToggle">
+              <span class="type-toggle-thumb" aria-hidden="true"></span>
+              <button type="button" id="typeBrandBtn" aria-pressed="true">I'm a Brand</button>
+              <button type="button" id="typeInfluencerBtn" aria-pressed="false">I'm an Influencer</button>
+            </div>
+
+            <div class="form-status" id="signupStatus">
+              <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+              <span></span>
+            </div>
+
+            <div id="message" class="form-status"></div>
+            <form class="signup-form" id="signupForm">
+              <div class="form-group">
+                <label for="signup-name">Full Name</label>
+                <input type="text" id="signup-name" name="name" placeholder="Your name" required>
+              </div>
+
+              <!-- Brand-only field -->
+              <div class="form-group form-section" id="brandFields">
+                <label for="signup-brand-name">Brand Name</label>
+                <input type="text" id="signup-brand-name" placeholder="Your brand name" data-required>
+              </div>
+
+              <div class="form-group">
+                <label for="signup-email">Email Address</label>
+                <input type="email" id="signup-email" name="email" placeholder="you@example.com" required>
+              </div>
+
+              <div class="form-group">
+                <label for="signup-phone">Phone Number</label>
+                <input type="tel" id="signup-phone" name="phone" placeholder="+91 XXXXX XXXXX" required>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block" id="signupSubmitBtn">Register as Brand</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script>
+      // Brand / Influencer toggle
+      const typeToggle = document.getElementById('typeToggle');
+      const typeBrandBtn = document.getElementById('typeBrandBtn');
+      const typeInfluencerBtn = document.getElementById('typeInfluencerBtn');
+      const brandFields = document.getElementById('brandFields');
+      const brandNameInput = document.getElementById('signup-brand-name');
+      const submitBtn = document.getElementById('signupSubmitBtn');
+
+      let accountType = 'Brand';
+
+      function setAccountType(type) {
+        accountType = type;
+        const isInfluencer = type === 'Influencer';
+        typeToggle.classList.toggle('is-influencer', isInfluencer);
+        typeBrandBtn.classList.toggle('is-active', !isInfluencer);
+        typeInfluencerBtn.classList.toggle('is-active', isInfluencer);
+        typeBrandBtn.setAttribute('aria-pressed', String(!isInfluencer));
+        typeInfluencerBtn.setAttribute('aria-pressed', String(isInfluencer));
+        brandFields.classList.toggle('is-hidden', isInfluencer);
+        brandNameInput.required = !isInfluencer;
+        submitBtn.textContent = isInfluencer ? 'Register as Influencer' : 'Register as Brand';
+      }
+
+      typeBrandBtn.addEventListener('click', () => setAccountType('Brand'));
+      typeInfluencerBtn.addEventListener('click', () => setAccountType('Influencer'));
+      setAccountType('Brand');
+
+      // Form submission
+      const form = document.getElementById('signupForm');
+      const messageDiv = document.getElementById('message');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+        messageDiv.style.display = 'none';
+        // Get form values
+        const name = document.getElementById('signup-name').value.trim();
+        const email = document.getElementById('signup-email').value.trim();
+        const brand = brandNameInput.value.trim();
+        const phone = document.getElementById('signup-phone').value.trim();
+        // YOUR Google Form URL
+        const formURL = 'https://docs.google.com/forms/d/e/1FAIpQLSdbADJz-IFfCXmoonz9R_Z6xzop61B-rC3ub8BEhmfBFe_PqA/formResponse';
+        // Create FormData with YOUR field IDs
+        const formData = new FormData();
+        formData.append('entry.1172266666', name);
+        formData.append('entry.178361927', email);
+        formData.append('entry.1430847182', brand);
+        formData.append('entry.220222765', phone);
+        formData.append('entry.1879586251', accountType);
+        try {
+          await fetch(formURL, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: formData
+          });
+          // Show success message
+          messageDiv.classList.remove('is-error');
+          messageDiv.classList.add('is-visible');
+          messageDiv.textContent = 'Thanks! We\'ve received your details and will be in touch soon.';
+          messageDiv.style.display = 'block';
+          // Clear form
+          form.reset();
+          setAccountType('Brand');
+          // Hide message after 5 seconds
+          setTimeout(() => {
+            messageDiv.style.display = 'none';
+          }, 5000);
+        } catch (error) {
+          // Show error message
+          messageDiv.classList.add('is-error');
+          messageDiv.textContent = 'Something went wrong. Please try again.';
+          messageDiv.style.display = 'block';
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = accountType === 'Influencer' ? 'Register as Influencer' : 'Register as Brand';
+        }
+      });
+    </script>
+    <div class="section-divider" aria-hidden="true"></div>
+
+    <!-- CTA -->
+    <section class="section">
+      <div class="container">
+        <div class="cta">
+          <div class="cta-inner">
+            <h2>Stop Searching. Start Connecting.</h2>
+            <p>Whether you're looking for your next influencer marketing partner or your next brand collaboration, start
+              your search with Find My Influencer.</p>
+            <div class="cta-actions">
+              <a href="signup.html" class="btn btn-white">Join for Free</a>
+              <a href="login.html" class="btn btn-outline">Log In</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="brand" aria-label="findmyinfluencer home">
+            <img src="images/logo-light.png" alt="findmyinfluencer logo">
+          </a>
+          <p>India's influencer marketing platform helping brands discover, hire and grow with verified creators across
+            every niche.</p>
+          <div class="social-links">
+            <a href="https://www.instagram.com/find_my_influencer/" target="_blank" class="c-instagram"
+              aria-label="findmyinfluencer on Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+            <a href="https://www.facebook.com/people/Find-My-Influencer/61588769773931/" target="_blank" class="c-x"
+              aria-label="findmyinfluencer on X"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
+            <a href="https://www.youtube.com/@findmyinfluencer" target="_blank" class="c-youtube"
+              aria-label="findmyinfluencer on YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a>
+            <a href="https://www.linkedin.com/company/findmyinfluencer/" target="_blank" class="c-linkedin"
+              aria-label="findmyinfluencer on LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+          </div>
+        </div>
+
+        <nav aria-label="For brands">
+          <h3 class="footer-heading">Company</h3>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="find-influencer.html">Find Influencer</a></li>
+            <li><a href="campaigns.html">Campaigns</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </nav>
+
+        <nav aria-label="For influencers">
+          <h3 class="footer-heading">Resources</h3>
+          <ul class="footer-links">
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="blog.html">Our Blog</a></li>
+            <li><a href="wall-of-love.html">Wall of Love</a></li>
+            <li><a href="Javascript:void(0);">Careers</a></li>
+          </ul>
+        </nav>
+
+        <nav aria-label="Legal">
+          <h3 class="footer-heading">Legal</h3>
+          <ul class="footer-links">
+            <li><a href="signup.html">Join for Free</a></li>
+            <li><a href="login.html">Login to App</a></li>
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="terms-of-service.html">Terms of Service</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 findmyinfluencer. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+
+</html>

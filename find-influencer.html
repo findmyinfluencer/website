@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Influencer — Find My Influencer</title>
+  <meta name="description" content="Search and filter verified creators in Chennai by category, platform, city, language and follower count on Find My Influencer.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.findmyinfluencer.com/find-influencer.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Find My Influencer">
+  <meta property="og:title" content="Find Influencer — Find My Influencer">
+  <meta property="og:description" content="Search and filter verified creators by category, platform, city, language and follower count.">
+  <meta property="og:url" content="https://www.findmyinfluencer.com/find-influencer.html">
+  <meta property="og:image" content="/images/favicon-512.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/svg+xml" href="images/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer">
+
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="brand" aria-label="findmyinfluencer home">
+        <img src="images/logo-dark.png" alt="findmyinfluencer logo">
+      </a>
+
+      <nav class="nav-main" id="primary-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="find-influencer.html" aria-current="page">Find Influencer</a>
+        <a href="campaigns.html">Campaigns</a>
+        <a href="blog.html">Blog</a>
+        <a href="contact.html">Contact</a>
+
+        <div class="nav-mobile-actions">
+          <a href="login.html" class="btn btn-outline btn-block">Log In</a>
+          <a href="signup.html" class="btn btn-primary btn-block">Join for Free</a>
+        </div>
+      </nav>
+
+      <div class="header-actions">
+        <a href="login.html" class="btn btn-outline btn-sm">Log In</a>
+        <a href="signup.html" class="btn btn-primary btn-sm">Join for Free</a>
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primary-nav">
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- Page hero -->
+    <section class="page-hero">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="index.html">Home</a>
+          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+          <span>Find Influencer</span>
+        </div>
+        <h1>Find Your Perfect <span class="highlight">Influencer</span></h1>
+        <p>Search and filter verified creators by category, platform, city, language and follower count. Starting in Chennai, with more cities added every week.</p>
+      </div>
+    </section>
+
+
+    <!-- Filters + results -->
+    <section class="section section-flush-top">
+      <div class="container">
+        <div class="find-filter-bar">
+          <div class="filter-search">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <input type="text" id="filterSearch" placeholder="Search by name, handle or niche...">
+          </div>
+
+          <div class="filter-selects">
+            <select id="filterCategory" aria-label="Filter by category">
+              <option value="">All Categories</option>
+            </select>
+            <select id="filterPlatform" aria-label="Filter by platform">
+              <option value="">All Platforms</option>
+              <option value="instagram">Instagram</option>
+              <option value="youtube">YouTube</option>
+            </select>
+            <select id="filterCity" aria-label="Filter by city">
+              <option value="">All Cities</option>
+            </select>
+            <select id="filterLanguage" aria-label="Filter by language">
+              <option value="">All Languages</option>
+            </select>
+            <select id="filterFollowers" aria-label="Filter by follower count">
+              <option value="">Any Follower Count</option>
+              <option value="under-300k">Under 300K</option>
+              <option value="300k-500k">300K – 500K</option>
+              <option value="500k-1m">500K – 1M</option>
+              <option value="1m-plus">1M+</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="find-results-meta">
+          <span id="resultsCount"><strong>16</strong> creators found</span>
+          <button type="button" id="clearFilters" class="filter-clear">Clear filters</button>
+        </div>
+
+        <div class="influencer-grid" id="findResultsGrid">
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider" aria-hidden="true"></div>
+
+    <!-- CTA -->
+    <section class="section">
+      <div class="container">
+        <div class="cta">
+          <div class="cta-inner">
+            <h2>Stop Searching. Start Connecting.</h2>
+            <p>Whether you're looking for your next influencer marketing partner or your next brand collaboration, start your search with Find My Influencer.</p>
+            <div class="cta-actions">
+              <a href="signup.html" class="btn btn-white">Join for Free</a>
+              <a href="login.html" class="btn btn-outline">Log In</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="brand" aria-label="findmyinfluencer home">
+            <img src="images/logo-light.png" alt="findmyinfluencer logo">
+          </a>
+          <p>India's influencer marketing platform helping brands discover, hire and grow with verified creators across every niche.</p>
+          <div class="social-links">
+            <a href="https://www.instagram.com/find_my_influencer/" target="_blank" class="c-instagram" aria-label="findmyinfluencer on Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+            <a href="https://www.facebook.com/people/Find-My-Influencer/61588769773931/" target="_blank" class="c-x" aria-label="findmyinfluencer on X"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
+            <a href="https://www.youtube.com/@findmyinfluencer" target="_blank" class="c-youtube" aria-label="findmyinfluencer on YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a>
+            <a href="https://www.linkedin.com/company/findmyinfluencer/" target="_blank" class="c-linkedin" aria-label="findmyinfluencer on LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+          </div>
+        </div>
+
+        <nav aria-label="For brands">
+          <h3 class="footer-heading">Company</h3>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="find-influencer.html">Find Influencer</a></li>
+            <li><a href="campaigns.html">Campaigns</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </nav>
+
+        <nav aria-label="For influencers">
+          <h3 class="footer-heading">Resources</h3>
+          <ul class="footer-links">
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="blog.html">Our Blog</a></li>
+            <li><a href="wall-of-love.html">Wall of Love</a></li>
+            <li><a href="Javascript:void(0);">Careers</a></li>
+          </ul>
+        </nav>
+
+        <nav aria-label="Legal">
+          <h3 class="footer-heading">Legal</h3>
+          <ul class="footer-links">
+            <li><a href="signup.html">Join for Free</a></li>
+            <li><a href="login.html">Login to App</a></li>
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="terms-of-service.html">Terms of Service</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 findmyinfluencer. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Find Influencer page: live search + filters over data/influencers.json,
+    // with a free-signup card always pinned to the end of the results.
+    (function initFindInfluencerPage() {
+      "use strict";
+
+      var escapeHtml = window.FMI.escapeHtml;
+
+      var grid = document.getElementById("findResultsGrid");
+      if (!grid) return;
+
+      var searchInput = document.getElementById("filterSearch");
+      var categorySelect = document.getElementById("filterCategory");
+      var platformSelect = document.getElementById("filterPlatform");
+      var citySelect = document.getElementById("filterCity");
+      var languageSelect = document.getElementById("filterLanguage");
+      var followersSelect = document.getElementById("filterFollowers");
+      var clearBtn = document.getElementById("clearFilters");
+      var resultsCount = document.getElementById("resultsCount");
+
+      var SIGNUP_CARD_HTML =
+        '<div class="influencer-card signup-card">' +
+          '<div class="signup-card-inner">' +
+            '<span class="signup-icon"><i class="fa-solid fa-lock-open" aria-hidden="true"></i></span>' +
+            "<h3>Unlock Unlimited Searches</h3>" +
+            "<p>Join free to search and filter every verified creator, including cities beyond Chennai.</p>" +
+            '<a href="signup.html" class="btn btn-white btn-block">Join for Free</a>' +
+          "</div>" +
+        "</div>";
+
+      function parseFollowers(str) {
+        var match = /^([\d.]+)([KM]?)$/.exec(String(str).trim());
+        if (!match) return 0;
+        var num = parseFloat(match[1]);
+        if (match[2] === "M") num *= 1000000;
+        else if (match[2] === "K") num *= 1000;
+        return num;
+      }
+
+      function matchesFollowerBucket(followers, bucket) {
+        if (!bucket) return true;
+        var n = parseFollowers(followers);
+        if (bucket === "under-300k") return n < 300000;
+        if (bucket === "300k-500k") return n >= 300000 && n < 500000;
+        if (bucket === "500k-1m") return n >= 500000 && n < 1000000;
+        if (bucket === "1m-plus") return n >= 1000000;
+        return true;
+      }
+
+      function renderCard(inf) {
+        return (
+          '<a class="influencer-card ' + escapeHtml(inf.theme) + '" href="#">' +
+            '<div class="influencer-cover"><span class="influencer-badge">' + escapeHtml(inf.badge) + "</span></div>" +
+            '<div class="influencer-avatar">' + escapeHtml(inf.avatarInitials) + "</div>" +
+            '<div class="influencer-body">' +
+              "<h3>" + escapeHtml(inf.name) + "</h3>" +
+              '<p class="influencer-handle">' + escapeHtml(inf.handle) + "</p>" +
+              '<span class="influencer-pill">' + escapeHtml(inf.niche) + "</span>" +
+              '<div class="influencer-stats-row">' +
+                "<div><strong>" + escapeHtml(inf.followers) + '</strong><span><i class="fa-brands fa-' + escapeHtml(inf.platform) + '" aria-hidden="true"></i><span class="visually-hidden">' + escapeHtml(inf.platform) + "</span></span></div>" +
+                "<div><strong>" + escapeHtml(inf.engagement) + '</strong><span><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span class="visually-hidden">Engagement</span></span></div>' +
+                "<div><strong>" + escapeHtml(inf.city) + '</strong><span><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span class="visually-hidden">City</span></span></div>' +
+              "</div>" +
+            "</div>" +
+          "</a>"
+        );
+      }
+
+      var allInfluencers = [];
+
+      function applyFilters() {
+        var query = searchInput.value.trim().toLowerCase();
+        var category = categorySelect.value;
+        var platform = platformSelect.value;
+        var city = citySelect.value;
+        var language = languageSelect.value;
+        var followerBucket = followersSelect.value;
+
+        var filtered = allInfluencers.filter(function (inf) {
+          if (query) {
+            var haystack = (inf.name + " " + inf.handle + " " + inf.niche).toLowerCase();
+            if (haystack.indexOf(query) === -1) return false;
+          }
+          if (category && inf.category !== category) return false;
+          if (platform && inf.platform !== platform) return false;
+          if (city && inf.city !== city) return false;
+          if (language && inf.language !== language) return false;
+          if (!matchesFollowerBucket(inf.followers, followerBucket)) return false;
+          return true;
+        });
+
+        var cardsHtml = filtered.length
+          ? filtered.map(renderCard).join("")
+          : '<p class="find-empty-state">No creators match these filters yet. Try widening your search.</p>';
+
+        grid.innerHTML = SIGNUP_CARD_HTML + cardsHtml;
+
+        if (resultsCount) {
+          resultsCount.innerHTML = "<strong>" + filtered.length + "</strong> creator" + (filtered.length === 1 ? "" : "s") + " found";
+        }
+      }
+
+      function populateSelect(select, values) {
+        values.forEach(function (value) {
+          var option = document.createElement("option");
+          option.value = value;
+          option.textContent = value;
+          select.appendChild(option);
+        });
+      }
+
+      fetch("data/influencers.json")
+        .then(function (res) {
+          if (!res.ok) throw new Error("Failed to load data/influencers.json");
+          return res.json();
+        })
+        .then(function (items) {
+          allInfluencers = items;
+
+          var categories = items.map(function (i) { return i.category; }).filter(function (v, i, arr) { return arr.indexOf(v) === i; }).sort();
+          var cities = items.map(function (i) { return i.city; }).filter(function (v, i, arr) { return arr.indexOf(v) === i; }).sort();
+          var languages = items.map(function (i) { return i.language; }).filter(function (v, i, arr) { return arr.indexOf(v) === i; }).sort();
+
+          populateSelect(categorySelect, categories);
+          populateSelect(citySelect, cities);
+          populateSelect(languageSelect, languages);
+
+          applyFilters();
+        })
+        .catch(function (err) {
+          console.error(err);
+          grid.innerHTML = SIGNUP_CARD_HTML + '<p class="find-empty-state">Couldn\'t load creators right now. Please try again shortly.</p>';
+        });
+
+      [searchInput, categorySelect, platformSelect, citySelect, languageSelect, followersSelect].forEach(function (el) {
+        el.addEventListener("input", applyFilters);
+        el.addEventListener("change", applyFilters);
+      });
+
+      if (clearBtn) {
+        clearBtn.addEventListener("click", function () {
+          searchInput.value = "";
+          categorySelect.value = "";
+          platformSelect.value = "";
+          citySelect.value = "";
+          languageSelect.value = "";
+          followersSelect.value = "";
+          applyFilters();
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Email — Find My Influencer</title>
+  <meta name="description" content="Verify your Find My Influencer account email address.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://www.findmyinfluencer.com/email-verification.html">
+
+  <link rel="icon" type="image/svg+xml" href="images/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    referrerpolicy="no-referrer">
+
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="brand" aria-label="findmyinfluencer home">
+        <img src="images/logo-dark.png" alt="findmyinfluencer logo">
+      </a>
+
+      <nav class="nav-main" id="primary-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="find-influencer.html">Find Influencer</a>
+        <a href="campaigns.html">Campaigns</a>
+        <a href="blog.html">Blog</a>
+        <a href="contact.html">Contact</a>
+
+        <div class="nav-mobile-actions">
+          <a href="login1.html" class="btn btn-outline btn-block">Log In</a>
+          <a href="signup1.html" class="btn btn-primary btn-block">Join for Free</a>
+        </div>
+      </nav>
+
+      <div class="header-actions">
+        <a href="login1.html" class="btn btn-outline btn-sm">Log In</a>
+        <a href="signup1.html" class="btn btn-primary btn-sm">Join for Free</a>
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primary-nav">
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="page-hero">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="index.html">Home</a>
+          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+          <span>Verify Email</span>
+        </div>
+        <h1>Verify your <span class="highlight">email</span></h1>
+        <p>Confirming your email address activates your account.</p>
+      </div>
+    </section>
+
+    <section class="section section-flush-top">
+      <div class="container">
+        <div class="signup-card-wrap">
+          <div class="contact-form-card coming-soon-card" id="verifyCard">
+            <span class="value-icon c-violet coming-soon-icon" id="verifyIcon">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+            <h2 id="verifyHeading">Verifying your email...</h2>
+            <p id="verifyText">Hang tight while we confirm your account.</p>
+            <a href="login1.html" class="btn btn-primary is-hidden" id="verifyAction">Log In</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="js/main.js"></script>
+    <script>
+      (function () {
+        "use strict";
+
+        var icon = document.getElementById("verifyIcon");
+        var heading = document.getElementById("verifyHeading");
+        var text = document.getElementById("verifyText");
+        var action = document.getElementById("verifyAction");
+        var token = new URLSearchParams(window.location.search).get("token") || "";
+
+        function setResult(success, message) {
+          icon.innerHTML = success
+            ? '<i class="fa-solid fa-circle-check" aria-hidden="true"></i>'
+            : '<i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>';
+          heading.textContent = success ? "Email verified" : "Verification failed";
+          text.textContent = message;
+          action.classList.add("btn-block");
+          action.removeAttribute("style");
+        }
+
+        if (!token) {
+          setResult(false, "This verification link is missing or invalid.");
+        } else {
+          fetch(window.FMI.apiBase + "/verify-email", {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token: token })
+          })
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+              setResult(!!data.ok, data.message || data.error);
+            })
+            .catch(function () {
+              setResult(false, "Something went wrong. Please try again.");
+            });
+        }
+      })();
+    </script>
+
+    <div class="section-divider" aria-hidden="true"></div>
+
+    <section class="section">
+      <div class="container">
+        <div class="cta">
+          <div class="cta-inner">
+            <h2>Stop Searching. Start Connecting.</h2>
+            <p>Whether you're looking for your next influencer marketing partner or your next brand collaboration, start
+              your search with Find My Influencer.</p>
+            <div class="cta-actions">
+              <a href="signup1.html" class="btn btn-white">Join for Free</a>
+              <a href="contact.html" class="btn btn-outline">Contact Us</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="brand" aria-label="findmyinfluencer home">
+            <img src="images/logo-light.png" alt="findmyinfluencer logo">
+          </a>
+          <p>India's influencer marketing platform helping brands discover, hire and grow with verified creators across
+            every niche.</p>
+          <div class="social-links">
+            <a href="https://www.instagram.com/find_my_influencer/" target="_blank" class="c-instagram"
+              aria-label="findmyinfluencer on Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+            <a href="https://www.facebook.com/people/Find-My-Influencer/61588769773931/" target="_blank" class="c-x"
+              aria-label="findmyinfluencer on X"><i class="fa-brands fa-facebook" aria-hidden="true"></i></a>
+            <a href="https://www.youtube.com/@findmyinfluencer" target="_blank" class="c-youtube"
+              aria-label="findmyinfluencer on YouTube"><i class="fa-brands fa-youtube" aria-hidden="true"></i></a>
+            <a href="https://www.linkedin.com/company/findmyinfluencer/" target="_blank" class="c-linkedin"
+              aria-label="findmyinfluencer on LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+          </div>
+        </div>
+
+        <nav aria-label="For brands">
+          <h3 class="footer-heading">Company</h3>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="find-influencer.html">Find Influencer</a></li>
+            <li><a href="campaigns.html">Campaigns</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </nav>
+
+        <nav aria-label="For influencers">
+          <h3 class="footer-heading">Resources</h3>
+          <ul class="footer-links">
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="blog.html">Our Blog</a></li>
+            <li><a href="wall-of-love.html">Wall of Love</a></li>
+            <li><a href="Javascript:void(0);">Careers</a></li>
+          </ul>
+        </nav>
+
+        <nav aria-label="Legal">
+          <h3 class="footer-heading">Legal</h3>
+          <ul class="footer-links">
+            <li><a href="signup1.html">Join for Free</a></li>
+            <li><a href="login1.html">Login to App</a></li>
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="terms-of-service.html">Terms of Service</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 findmyinfluencer. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

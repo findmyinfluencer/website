@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /signup1.html
+Disallow: /login1.html
+Disallow: /forgot-password.html
+Disallow: /email-verification.html
+Disallow: /reset-password.html
+
+Sitemap: https://www.findmyinfluencer.com/sitemap.xml

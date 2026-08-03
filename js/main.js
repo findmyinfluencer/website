@@ -134,6 +134,12 @@
   // blog/*.html post).
   window.FMI = {
     escapeHtml: escapeHtml,
-    renderFromJson: renderFromJson
+    renderFromJson: renderFromJson,
+    // The PHP API and the Vue dashboard app are hosted separately from this
+    // static site. LOCAL DEV VALUES below — swap to the real subdomains
+    // (e.g. https://api.findmyinfluencer.com / https://app.findmyinfluencer.com)
+    // before deploying.
+    apiBase: "http://localhost/api",
+    appBase: "http://localhost:5173"
   };
 })();

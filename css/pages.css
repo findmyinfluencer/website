@@ -1436,8 +1436,28 @@
   margin-bottom: 28px;
 }
 
+.filter-search-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.filter-search-row #applyFilters {
+  flex-shrink: 0;
+  height: 48px;
+  padding-top: 0;
+  padding-bottom: 0;
+  box-shadow: none;
+}
+
+.filter-search-row #applyFilters:hover {
+  box-shadow: none;
+  transform: none;
+}
+
 .filter-search {
   position: relative;
+  flex: 1;
 }
 
 .filter-search i {
@@ -1451,7 +1471,8 @@
 
 .filter-search input {
   width: 100%;
-  padding: 13px 16px 13px 42px;
+  height: 48px;
+  padding: 0 16px 0 42px;
   font-family: inherit;
   font-size: 15px;
   color: var(--fmi-heading);
@@ -1500,6 +1521,27 @@
   box-shadow: 0 0 0 3px var(--fmi-primary-light);
 }
 
+.filter-reset-btn {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: var(--fmi-body);
+  background: var(--fmi-white);
+  border: 1px solid var(--fmi-border);
+  border-radius: var(--fmi-radius-sm);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.filter-reset-btn:hover {
+  border-color: var(--fmi-primary);
+  color: var(--fmi-primary);
+}
+
 .find-results-meta {
   display: flex;
   align-items: center;
@@ -1513,27 +1555,68 @@
   color: var(--fmi-heading);
 }
 
-.filter-clear {
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--fmi-primary);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-}
-
-.filter-clear:hover {
-  text-decoration: underline;
-}
-
 .find-empty-state {
   grid-column: 1 / -1;
   text-align: center;
   padding: 40px 20px;
   color: var(--fmi-muted);
   font-size: 15px;
+}
+
+.find-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.page-nav-btn {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: var(--fmi-body);
+  background: var(--fmi-white);
+  border: 1px solid var(--fmi-border);
+  border-radius: var(--fmi-radius-sm);
+  box-shadow: var(--fmi-shadow-sm);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.page-nav-btn:hover:not(:disabled) {
+  border-color: var(--fmi-primary);
+  color: var(--fmi-primary);
+}
+
+.page-nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.page-range {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--fmi-heading);
+}
+
+/* Compact variant sitting inline next to "Clear filters", above the grid */
+.find-pagination-compact {
+  margin-top: 0;
+  gap: 12px;
+}
+
+.find-pagination-compact .page-nav-btn {
+  width: 32px;
+  height: 32px;
+  font-size: 13px;
+}
+
+.find-pagination-compact .page-range {
+  font-size: 14px;
 }
 
 /* Signup card — always the last card in the Find Influencer results grid */
@@ -1666,6 +1749,14 @@
 
   .filter-selects {
     grid-template-columns: 1fr;
+  }
+
+  .filter-search-row {
+    flex-wrap: wrap;
+  }
+
+  .filter-search {
+    flex-basis: 100%;
   }
 
   .find-results-meta {

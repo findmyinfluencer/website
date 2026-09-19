@@ -80,7 +80,7 @@
           <span>Sign Up</span>
         </div>
         <h1>Join <span class="highlight">Find My Influencer</span></h1>
-        <p>Tell us a bit about yourself and we'll be in touch. Free for both brands and creators.</p>
+        <p>Tell us a bit about yourself and we'll be in touch. Free for influencers to join and get discovered by brands.</p>
       </div>
     </section>
 
@@ -89,12 +89,6 @@
       <div class="container">
         <div class="signup-card-wrap">
           <div class="contact-form-card">
-            <div class="type-toggle" id="typeToggle">
-              <span class="type-toggle-thumb" aria-hidden="true"></span>
-              <button type="button" id="typeBrandBtn" aria-pressed="true">I'm a Brand</button>
-              <button type="button" id="typeInfluencerBtn" aria-pressed="false">I'm an Influencer</button>
-            </div>
-
             <div class="form-status" id="signupStatus">
               <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
               <span></span>
@@ -107,12 +101,6 @@
                 <input type="text" id="signup-name" name="name" placeholder="Your name" required>
               </div>
 
-              <!-- Brand-only field -->
-              <div class="form-group form-section" id="brandFields">
-                <label for="signup-brand-name">Brand Name</label>
-                <input type="text" id="signup-brand-name" placeholder="Your brand name" data-required>
-              </div>
-
               <div class="form-group">
                 <label for="signup-email">Email Address</label>
                 <input type="email" id="signup-email" name="email" placeholder="you@example.com" required>
@@ -123,43 +111,19 @@
                 <input type="tel" id="signup-phone" name="phone" placeholder="+91 XXXXX XXXXX" required>
               </div>
 
-              <button type="submit" class="btn btn-primary btn-block" id="signupSubmitBtn">Register as Brand</button>
+              <button type="submit" class="btn btn-primary btn-block" id="signupSubmitBtn">Register as Influencer</button>
             </form>
           </div>
         </div>
       </div>
     </section>
     <script>
-      // Brand / Influencer toggle
-      const typeToggle = document.getElementById('typeToggle');
-      const typeBrandBtn = document.getElementById('typeBrandBtn');
-      const typeInfluencerBtn = document.getElementById('typeInfluencerBtn');
-      const brandFields = document.getElementById('brandFields');
-      const brandNameInput = document.getElementById('signup-brand-name');
+      // Influencer signups only, for now — brand registration is hidden
+      // until that flow is ready.
       const submitBtn = document.getElementById('signupSubmitBtn');
-
-      let accountType = 'Brand';
-
-      function setAccountType(type) {
-        accountType = type;
-        const isInfluencer = type === 'Influencer';
-        typeToggle.classList.toggle('is-influencer', isInfluencer);
-        typeBrandBtn.classList.toggle('is-active', !isInfluencer);
-        typeInfluencerBtn.classList.toggle('is-active', isInfluencer);
-        typeBrandBtn.setAttribute('aria-pressed', String(!isInfluencer));
-        typeInfluencerBtn.setAttribute('aria-pressed', String(isInfluencer));
-        brandFields.classList.toggle('is-hidden', isInfluencer);
-        brandNameInput.required = !isInfluencer;
-        submitBtn.textContent = isInfluencer ? 'Register as Influencer' : 'Register as Brand';
-      }
-
-      typeBrandBtn.addEventListener('click', () => setAccountType('Brand'));
-      typeInfluencerBtn.addEventListener('click', () => setAccountType('Influencer'));
-      setAccountType('Brand');
-
-      // Form submission
       const form = document.getElementById('signupForm');
       const messageDiv = document.getElementById('message');
+
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         submitBtn.disabled = true;
@@ -168,7 +132,6 @@
         // Get form values
         const name = document.getElementById('signup-name').value.trim();
         const email = document.getElementById('signup-email').value.trim();
-        const brand = brandNameInput.value.trim();
         const phone = document.getElementById('signup-phone').value.trim();
         // YOUR Google Form URL
         const formURL = 'https://docs.google.com/forms/d/e/1FAIpQLSdbADJz-IFfCXmoonz9R_Z6xzop61B-rC3ub8BEhmfBFe_PqA/formResponse';
@@ -176,9 +139,8 @@
         const formData = new FormData();
         formData.append('entry.1172266666', name);
         formData.append('entry.178361927', email);
-        formData.append('entry.1430847182', brand);
         formData.append('entry.220222765', phone);
-        formData.append('entry.1879586251', accountType);
+        formData.append('entry.1879586251', 'Influencer');
         try {
           await fetch(formURL, {
             method: 'POST',
@@ -192,7 +154,6 @@
           messageDiv.style.display = 'block';
           // Clear form
           form.reset();
-          setAccountType('Brand');
           // Hide message after 5 seconds
           setTimeout(() => {
             messageDiv.style.display = 'none';
@@ -204,7 +165,7 @@
           messageDiv.style.display = 'block';
         } finally {
           submitBtn.disabled = false;
-          submitBtn.textContent = accountType === 'Influencer' ? 'Register as Influencer' : 'Register as Brand';
+          submitBtn.textContent = 'Register as Influencer';
         }
       });
     </script>
@@ -215,12 +176,12 @@
       <div class="container">
         <div class="cta">
           <div class="cta-inner">
-            <h2>Stop Searching. Start Connecting.</h2>
+            <h2>Your Next Brand Collaboration Starts Here.</h2>
             <p>Whether you're looking for your next influencer marketing partner or your next brand collaboration, start
               your search with Find My Influencer.</p>
             <div class="cta-actions">
-              <a href="signup.html" class="btn btn-white">Join for Free</a>
-              <a href="login.html" class="btn btn-outline">Log In</a>
+              <a href="find-influencer.html" class="btn btn-white">Search Influencer</a>
+              <a href="signup.html" class="btn btn-outline">Join for Free</a>
             </div>
           </div>
         </div>

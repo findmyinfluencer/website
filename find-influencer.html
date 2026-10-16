@@ -84,25 +84,12 @@
     <section class="section section-flush-top">
       <div class="container">
         <div class="find-filter-bar">
-          <div class="filter-search-row">
-            <div class="filter-search">
-              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-              <input type="text" id="filterSearch" placeholder="Search by name, handle or niche...">
-            </div>
-            <button type="button" id="applyFilters" class="btn btn-primary btn-sm">Apply Filters</button>
-            <button type="button" id="clearFilters" class="filter-reset-btn" aria-label="Reset filters" title="Reset filters">
-              <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
-            </button>
-          </div>
-
           <div class="filter-selects">
             <select id="filterCategory" aria-label="Filter by category">
               <option value="">All Categories</option>
             </select>
             <select id="filterPlatform" aria-label="Filter by platform">
               <option value="">All Platforms</option>
-              <option value="instagram">Instagram</option>
-              <option value="youtube">YouTube</option>
             </select>
             <select id="filterCity" aria-label="Filter by city">
               <option value="">All Cities</option>
@@ -112,11 +99,18 @@
             </select>
             <select id="filterFollowers" aria-label="Filter by follower count">
               <option value="">Any Follower Count</option>
-              <option value="under-300k">Under 300K</option>
-              <option value="300k-500k">300K – 500K</option>
-              <option value="500k-1m">500K – 1M</option>
-              <option value="1m-plus">1M+</option>
             </select>
+          </div>
+
+          <div class="filter-search-row">
+            <div class="filter-search">
+              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+              <input type="text" id="filterSearch" placeholder="Search by name or handle...">
+            </div>
+            <button type="button" id="applyFilters" class="btn btn-primary btn-sm">Apply Filters</button>
+            <button type="button" id="clearFilters" class="filter-reset-btn" aria-label="Reset filters" title="Reset filters">
+              <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+            </button>
           </div>
         </div>
 
@@ -233,10 +227,10 @@
             '<div class="influencer-body">' +
               "<h3>" + escapeHtml(inf.name) + "</h3>" +
               '<p class="influencer-handle">' + escapeHtml(inf.handle) + "</p>" +
-              '<span class="influencer-pill">' + escapeHtml(inf.niche) + "</span>" +
+              '<span class="influencer-pill">' + escapeHtml(inf.category) + "</span>" +
+              '<div class="influencer-reach"><i class="fa-brands fa-' + escapeHtml(inf.platform) + '" aria-hidden="true"></i><strong>' + escapeHtml(inf.followers) + "</strong><span class=\"visually-hidden\">" + escapeHtml(inf.platform) + " followers</span></div>" +
               '<div class="influencer-stats-row">' +
-                "<div><strong>" + escapeHtml(inf.followers) + '</strong><span><i class="fa-brands fa-' + escapeHtml(inf.platform) + '" aria-hidden="true"></i><span class="visually-hidden">' + escapeHtml(inf.platform) + "</span></span></div>" +
-                "<div><strong>" + escapeHtml(inf.engagement) + '</strong><span><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span class="visually-hidden">Engagement</span></span></div>' +
+                "<div><strong>" + escapeHtml(inf.language) + '</strong><span><i class="fa-solid fa-spell-check" aria-hidden="true"></i><span class="visually-hidden">Language</span></span></div>' +
                 "<div><strong>" + escapeHtml(inf.city) + '</strong><span><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span class="visually-hidden">City</span></span></div>' +
               "</div>" +
             "</div>" +
@@ -244,22 +238,43 @@
         );
       }
 
-      var API_URL = "/api/influencers.php";
-      var facetsLoaded = false;
+      var API_URL = "https://api.findmyinfluencer.com/influencers.php";
+      var FILTERS_URL = "data/filters.json";
       var fetchToken = 0;
       var currentPage = 1;
 
-      function populateSelect(select, values) {
+      // Category/city/language/platform/followers option ids live in one
+      // place — website/data/filters.json — shared with the backend
+      // (api/lib/filters.php) so search always runs on the indexed numeric
+      // id, never label text. Adding/renaming an option only ever means
+      // editing that one file.
+      function populateSelect(select, idToLabel) {
         var current = select.value;
         select.querySelectorAll("option[data-dynamic]").forEach(function (opt) { opt.remove(); });
-        values.forEach(function (value) {
+        Object.keys(idToLabel).forEach(function (id) {
           var option = document.createElement("option");
-          option.value = value;
-          option.textContent = value;
+          option.value = id;
+          option.textContent = idToLabel[id];
           option.setAttribute("data-dynamic", "");
           select.appendChild(option);
         });
-        if (values.indexOf(current) !== -1) select.value = current;
+        if (current) select.value = current;
+      }
+
+      function loadFilterOptions() {
+        fetch(FILTERS_URL)
+          .then(function (res) {
+            if (!res.ok) throw new Error("Failed to load " + FILTERS_URL);
+            return res.json();
+          })
+          .then(function (filters) {
+            populateSelect(categorySelect, filters.categories || {});
+            populateSelect(citySelect, filters.cities || {});
+            populateSelect(languageSelect, filters.languages || {});
+            populateSelect(platformSelect, filters.platforms || {});
+            populateSelect(followersSelect, filters.followers || {});
+          })
+          .catch(function (err) { console.error(err); });
       }
 
       function renderPagination(page, totalPages, total, pageSize) {
@@ -325,13 +340,6 @@
 
             currentPage = data.page || currentPage;
             renderPagination(currentPage, data.totalPages || 1, total, data.pageSize || 20);
-
-            if (!facetsLoaded && data.facets) {
-              populateSelect(categorySelect, data.facets.categories || []);
-              populateSelect(citySelect, data.facets.cities || []);
-              populateSelect(languageSelect, data.facets.languages || []);
-              facetsLoaded = true;
-            }
           })
           .catch(function (err) {
             console.error(err);
@@ -340,6 +348,7 @@
           });
       }
 
+      loadFilterOptions();
       applyFilters(true);
 
       // Filter inputs no longer trigger a request on every keystroke/change —

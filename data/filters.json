@@ -1,0 +1,65 @@
+{
+  "categories": {
+    "1": "Art",
+    "2": "Automobile",
+    "3": "Beauty",
+    "4": "Comedy",
+    "5": "Dance",
+    "6": "Education",
+    "7": "Fashion",
+    "8": "Finance",
+    "9": "Fitness",
+    "10": "Food",
+    "11": "Gaming",
+    "12": "Home",
+    "13": "Music",
+    "14": "Parenting",
+    "15": "Photography",
+    "16": "Tech",
+    "17": "Travel"
+  },
+  "cities": {
+    "1": "Ahmedabad",
+    "2": "Bangalore",
+    "3": "Chandigarh",
+    "4": "Chennai",
+    "5": "Delhi",
+    "6": "Hyderabad",
+    "7": "Kochi",
+    "8": "Kolkata",
+    "9": "Lucknow",
+    "10": "Mumbai",
+    "11": "Pune"
+  },
+  "languages": {
+    "1": "Bengali",
+    "2": "English",
+    "3": "Gujarati",
+    "4": "Hindi",
+    "5": "Kannada",
+    "6": "Malayalam",
+    "7": "Marathi",
+    "8": "Punjabi",
+    "9": "Tamil",
+    "10": "Telugu"
+  },
+  "platforms": {
+    "1": "Instagram",
+    "2": "Facebook",
+    "3": "YouTube",
+    "4": "Linkedin",
+    "5": "Snapchat",
+    "6": "Twitter",
+    "7": "Pinterest"
+  },
+  "followers": {
+    "1": "Max 10K",
+    "2": "10K to 20K",
+    "3": "20K to 50K",
+    "4": "50K to 100K",
+    "5": "100K to 250K",
+    "6": "250K to 500K",
+    "7": "500K to 1M",
+    "8": "More than 1M"
+  }
+}

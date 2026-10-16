@@ -139,6 +139,6 @@
     // static site. LOCAL DEV VALUES below — swap to the real subdomains
     // (e.g. https://api.findmyinfluencer.com / https://app.findmyinfluencer.com)
     // before deploying.
-    apiBase: "http://localhost/api"
+    apiBase: "https://api.findmyinfluencer.com"
   };
 })();

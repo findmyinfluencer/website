@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator Profile (Fresh) — Find My Influencer</title>
+  <meta name="description" content="Public creator profile on Find My Influencer — social reach, audience insights and contact details.">
+  <meta name="robots" content="noindex, follow">
+
+  <!-- Pretty URLs like .../p/<slug>/ add a path segment, so relative asset
+       resolution needs pinning back to this folder — but this folder's own
+       depth differs between local testing (/website/p/) and production
+       (/p/, once website's repo root becomes the site root), and has
+       already moved once. Rather than hardcode one prefix, derive it from
+       the actual URL: whatever precedes the "p" segment is the base.
+
+       The favicon/stylesheet links are written here (not as static markup)
+       so the browser's preload scanner never sees a pre-base href for them
+       and double-fetches — it can't see anything document.write() adds,
+       since that never appears in the raw HTML bytes it scans ahead of the
+       parser. The logo image and the two scripts further down use the same
+       window.__fmiBase for the same reason. -->
+  <script>
+    (function () {
+      var parts = location.pathname.split("/");
+      var i = parts.lastIndexOf("p");
+      var base = (i >= 0 ? parts.slice(0, i + 1) : parts.slice(0, -1)).join("/") + "/";
+      window.__fmiBase = base;
+      document.write(
+        '<base href="' + base + '">' +
+        '<link rel="icon" type="image/png" href="' + base + '../images/favicon.png">' +
+        '<link rel="stylesheet" href="' + base + 'css/style-v2.css">'
+      );
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="../index.html" class="brand" aria-label="findmyinfluencer home">
+        <img alt="findmyinfluencer logo">
+        <script>document.currentScript.previousElementSibling.src = window.__fmiBase + "../images/logo-dark.png";</script>
+      </a>
+      <div class="header-actions">
+        <a href="../signup.html" class="btn btn-primary btn-sm">Join for Free</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" data-creator-source="data/aditi-kapoor.json">
+
+    <!-- Loading state: replaced once the API response renders -->
+    <div class="loading-state" data-creator-loading>Loading creator profile…</div>
+
+    <!-- Hero: dotted banner sized to its content -->
+    <section class="hero" data-creator-section="profile" style="display: none;">
+      <div class="wrap hero-content">
+        <div class="avatar-ring" data-avatar>
+          <span class="avatar-circle" data-field="avatar-initials"></span>
+        </div>
+
+        <div class="hero-text">
+          <div class="hero-name-row">
+            <h1 data-field="name"></h1>
+            <span class="verified-badge" data-field="verified-badge"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Verified</span>
+          </div>
+          <p class="hero-meta" data-field="handle"></p>
+          <p class="hero-bio" data-field="bio"></p>
+          <div class="hero-tags" data-field="tags"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <div class="profile-grid">
+        <section class="stat-row" data-creator-section="stats" style="display: none;">
+          <div class="stat-band" data-field="stats"></div>
+        </section>
+
+        <section class="panel panel-main" data-creator-section="audience" style="display: none;">
+          <div class="panel-head">
+            <span class="eyebrow">Audience</span>
+            <h2>Who's Watching</h2>
+          </div>
+          <div class="audience-grid" data-field="audience"></div>
+        </section>
+
+        <section class="panel panel-main" data-creator-section="social" style="display: none;">
+          <div class="panel-head">
+            <span class="eyebrow">Connect</span>
+            <h2>Where to Find Them</h2>
+          </div>
+          <div class="social-grid" data-field="social"></div>
+        </section>
+
+        <aside class="panel panel-side" data-creator-section="contact" style="display: none;">
+          <div class="panel-head">
+            <span class="eyebrow">Reach Out</span>
+            <h2>Contact Details</h2>
+          </div>
+          <div class="contact-list" data-field="contact"></div>
+          <a href="#" class="btn btn-gradient btn-block" data-cta-mailto><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Invite to Campaign</a>
+          <p class="side-note" data-field="cta-text"></p>
+        </aside>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-bottom">
+      <span data-field="copyright">© 2026 findmyinfluencer. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      function load(src, cb) {
+        var s = document.createElement('script');
+        s.src = window.__fmiBase + src;
+        if (cb) s.onload = cb;
+        document.head.appendChild(s);
+      }
+      load('../js/main.js', function () { load('js/app-v2.js'); });
+    })();
+  </script>
+</body>
+</html>

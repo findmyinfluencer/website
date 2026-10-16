@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator Profile — Find My Influencer</title>
+  <meta name="description" content="Public creator profile on Find My Influencer — social reach, audience insights, reviews and contact details.">
+  <meta name="robots" content="noindex, follow">
+
+  <!-- GitHub Pages has no .htaccess/mod_rewrite — this file is its one
+       equivalent mechanism: it serves 404.html's content (status 404, but
+       the address bar keeps the original URL) for ANY unmatched path across
+       the whole site, not just /p/<slug>/ ones. So this file does two jobs:
+
+       1. For a path that actually looks like .../p/<slug>/ (or bare .../p/),
+          it's byte-for-byte the same page as p/index.html — same
+          self-computing base (location.pathname tells it where "p" is,
+          independent of which physical file GitHub actually served) and
+          the same app.js, which already renders a sensible empty state when
+          there's no slug. Keep this in sync with p/index.html if that page
+          changes.
+       2. For anything else (a genuinely dead link), it shows a plain
+          "not found" message instead of trying to render a creator profile
+          for an unrelated URL. -->
+  <script>
+    (function () {
+      var parts = location.pathname.split("/");
+      var isProfilePath = parts.indexOf("p") !== -1;
+
+      if (!isProfilePath) {
+        // document.write only INSERTS content — it can't stop the parser
+        // from continuing into the profile markup below in <body>. So
+        // instead: flag <html> and let CSS hide the profile template and
+        // show #fmi-404 in its place (see that block, near the top of body).
+        document.documentElement.setAttribute('data-fmi-404', '');
+        document.write(
+          '<style>' +
+          'body{font-family:system-ui,-apple-system,sans-serif;}' +
+          '[data-fmi-404] body > *:not(#fmi-404){display:none !important;}' +
+          '[data-fmi-404] #fmi-404{display:block !important;text-align:center;padding:80px 20px;color:#1a1a2e;}' +
+          '#fmi-404 h1{font-size:28px;margin-bottom:8px;}' +
+          '#fmi-404 p{color:#666;margin-bottom:24px;}' +
+          '#fmi-404 a{color:#5b4fff;font-weight:600;text-decoration:none;}' +
+          '</style>'
+        );
+        return;
+      }
+
+      var i = parts.lastIndexOf("p");
+      var base = (i >= 0 ? parts.slice(0, i + 1) : parts.slice(0, -1)).join("/") + "/";
+      window.__fmiBase = base;
+      document.write(
+        '<base href="' + base + '">' +
+        '<link rel="icon" type="image/png" href="' + base + '../images/favicon.png">' +
+        '<link rel="stylesheet" href="' + base + 'css/style.css">' +
+        '<link rel="preconnect" href="https://fonts.googleapis.com">' +
+        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' +
+        '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">' +
+        '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer">'
+      );
+    })();
+  </script>
+</head>
+<body>
+  <div id="fmi-404" style="display:none;">
+    <h1>Page not found</h1>
+    <p>The page you're looking for doesn't exist.</p>
+    <a href="/">Go to homepage</a>
+  </div>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="brand" aria-label="findmyinfluencer home">
+        <img alt="findmyinfluencer logo">
+        <script>if (window.__fmiBase) document.currentScript.previousElementSibling.src = window.__fmiBase + "../images/logo-dark.png";</script>
+      </a>
+
+      <div class="header-actions">
+        <a href="../signup.html" class="btn btn-primary btn-sm">Join for Free</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" data-creator-source="data/aditi-kapoor.json">
+
+    <!-- Loading state: replaced once the API response renders -->
+    <div class="creator-loading" data-creator-loading>Loading creator profile…</div>
+
+    <!-- Profile -->
+    <section class="page-hero" data-creator-section="profile" style="display: none;">
+      <div class="container">
+        <h1 class="creator-name"><span data-field="name"></span></h1>
+        <p class="creator-meta"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span data-field="city"></span> · <span data-field="handle"></span></p>
+        <p class="creator-bio" data-field="bio"></p>
+        <div class="creator-tags" data-field="tags"></div>
+        <a href="#" class="btn btn-primary"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Invite to Campaign</a>
+      </div>
+    </section>
+
+
+    <!-- Stats -->
+    <section class="section" data-creator-section="stats" style="display: none;">
+      <div class="container">
+        <div class="stat-band" data-field="stats"></div>
+      </div>
+    </section>
+
+
+    <!-- Contact details -->
+    <section class="section" data-creator-section="contact" style="display: none;">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Contact Details</h2>
+        </div>
+        <div class="quick-contact-grid" data-field="contact"></div>
+      </div>
+    </section>
+
+
+    <!-- Social links -->
+    <section class="section" data-creator-section="social" style="display: none;">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Where to Find Her</h2>
+        </div>
+        <div class="creator-social-list" data-field="social"></div>
+      </div>
+    </section>
+
+
+    <!-- Audience insights -->
+    <section class="section" data-creator-section="audience" style="display: none;">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Audience Insights</h2>
+        </div>
+        <div class="audience-grid" data-field="audience"></div>
+      </div>
+    </section>
+
+
+    <!-- Reviews & Ratings -->
+    <!-- <section class="section" data-creator-section="reviews" style="display: none;">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Reviews &amp; Ratings</h2>
+        </div>
+        <div class="reviews-head-row">
+          <span class="reviews-count" data-field="reviews-count"></span>
+          <button type="button" class="btn btn-outline btn-sm" data-reviews-open>See all reviews</button>
+        </div>
+        <div class="testimonial-grid" data-field="reviews-preview"></div>
+      </div>
+    </section> -->
+
+    <!-- CTA -->
+    <section class="section">
+      <div class="container">
+        <div class="cta">
+          <div class="cta-inner">
+            <h2>Ready to Collaborate?</h2>
+            <p data-field="cta-text"></p>
+            <div class="cta-actions">
+              <a href="#" class="btn btn-white"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Invite to Your Campaign</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <span data-field="copyright">© 2026 findmyinfluencer. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="review-modal-backdrop" data-reviews-backdrop></div>
+  <div class="review-modal-panel" data-reviews-panel>
+    <div class="review-modal-header">
+      <h2>All Reviews <span style="color:var(--fmi-muted);font-weight:600;font-size:14px;" data-field="modal-count"></span></h2>
+      <button type="button" class="review-modal-close" data-reviews-close aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+    </div>
+    <div class="review-modal-body">
+      <div class="review-filters" data-review-filters>
+        <button type="button" class="review-filter-chip is-active" data-filter="all">All</button>
+        <button type="button" class="review-filter-chip" data-filter="5">5 <i class="fa-solid fa-star" aria-hidden="true"></i></button>
+        <button type="button" class="review-filter-chip" data-filter="4">4 <i class="fa-solid fa-star" aria-hidden="true"></i></button>
+        <button type="button" class="review-filter-chip" data-filter="3">3 <i class="fa-solid fa-star" aria-hidden="true"></i></button>
+      </div>
+      <div class="review-modal-grid" data-field="reviews-all"></div>
+      <div class="review-modal-empty" data-review-empty>No reviews match this filter yet.</div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      if (!window.__fmiBase) return;
+      function load(src, cb) {
+        var s = document.createElement('script');
+        s.src = window.__fmiBase + src;
+        if (cb) s.onload = cb;
+        document.head.appendChild(s);
+      }
+      load('../js/main.js', function () { load('js/app.js'); });
+    })();
+  </script>
+</body>
+</html>

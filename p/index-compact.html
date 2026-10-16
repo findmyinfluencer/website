@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator Profile (Compact) — Find My Influencer</title>
+  <meta name="description" content="Public creator profile on Find My Influencer — social reach, audience insights, reviews and contact details.">
+  <meta name="robots" content="noindex, follow">
+
+  <!-- Pretty URLs like .../p/<slug>/ add a path segment, so relative asset
+       resolution needs pinning back to this folder — but this folder's own
+       depth differs between local testing (/website/p/) and production
+       (/p/, once website's repo root becomes the site root), and has
+       already moved once. Rather than hardcode one prefix, derive it from
+       the actual URL: whatever precedes the "p" segment is the base.
+
+       The favicon/stylesheet links are written here (not as static markup)
+       so the browser's preload scanner never sees a pre-base href for them
+       and double-fetches — it can't see anything document.write() adds,
+       since that never appears in the raw HTML bytes it scans ahead of the
+       parser. The logo image and the two scripts further down use the same
+       window.__fmiBase for the same reason. -->
+  <script>
+    (function () {
+      var parts = location.pathname.split("/");
+      var i = parts.lastIndexOf("p");
+      var base = (i >= 0 ? parts.slice(0, i + 1) : parts.slice(0, -1)).join("/") + "/";
+      window.__fmiBase = base;
+      document.write(
+        '<base href="' + base + '">' +
+        '<link rel="icon" type="image/png" href="' + base + '../images/favicon.png">' +
+        '<link rel="stylesheet" href="' + base + 'css/style-compact.css">'
+      );
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="brand" aria-label="findmyinfluencer home">
+        <img alt="findmyinfluencer logo">
+        <script>document.currentScript.previousElementSibling.src = window.__fmiBase + "../images/logo-dark.png";</script>
+      </a>
+
+      <div class="header-actions">
+        <a href="../signup.html" class="btn btn-primary btn-sm">Join for Free</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" data-creator-source="data/aditi-kapoor.json">
+
+    <!-- Loading state: replaced once the API response renders -->
+    <div class="creator-loading" data-creator-loading>Loading creator profile…</div>
+
+    <!-- Profile -->
+    <section class="page-hero" data-creator-section="profile" style="display: none;">
+      <div class="container">
+        <h1 class="creator-name"><span data-field="name"></span></h1>
+        <p class="creator-meta"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span data-field="city"></span> · <span data-field="handle"></span></p>
+        <p class="creator-bio" data-field="bio"></p>
+        <div class="creator-tags" data-field="tags"></div>
+        <a href="#" class="btn btn-primary"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Invite to Campaign</a>
+      </div>
+    </section>
+
+
+    <!-- Stats -->
+    <section class="section" data-creator-section="stats" style="display: none;">
+      <div class="container">
+        <div class="stat-band" data-field="stats"></div>
+      </div>
+    </section>
+
+
+    <!-- Contact details -->
+    <section class="section" data-creator-section="contact" style="display: none;">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Contact Details</h2>
+        </div>
+        <div class="quick-contact-grid" data-field="contact"></div>
+      </div>
+    </section>
+
+
+    <!-- Social links -->
+    <section class="section" data-creator-section="social" style="display: none;">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Where to Find Her</h2>
+        </div>
+        <div class="creator-social-list" data-field="social"></div>
+      </div>
+    </section>
+
+
+    <!-- Audience insights -->
+    <section class="section" data-creator-section="audience" style="display: none;">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Audience Insights</h2>
+        </div>
+        <div class="audience-grid" data-field="audience"></div>
+      </div>
+    </section>
+
+
+    <!-- Reviews & Ratings -->
+    <section class="section" data-creator-section="reviews" style="display: none;">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Reviews &amp; Ratings</h2>
+        </div>
+        <div class="reviews-head-row">
+          <span class="reviews-count" data-field="reviews-count"></span>
+          <button type="button" class="btn btn-outline btn-sm" data-reviews-open>See all reviews</button>
+        </div>
+        <div class="testimonial-grid" data-field="reviews-preview"></div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section">
+      <div class="container">
+        <div class="cta">
+          <div class="cta-inner">
+            <h2>Ready to Collaborate?</h2>
+            <p data-field="cta-text"></p>
+            <div class="cta-actions">
+              <a href="#" class="btn btn-white"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Invite to Your Campaign</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <span data-field="copyright">© 2026 findmyinfluencer. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="review-modal-backdrop" data-reviews-backdrop></div>
+  <div class="review-modal-panel" data-reviews-panel>
+    <div class="review-modal-header">
+      <h2>All Reviews <span style="color:var(--fmi-muted);font-weight:600;font-size:14px;" data-field="modal-count"></span></h2>
+      <button type="button" class="review-modal-close" data-reviews-close aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+    </div>
+    <div class="review-modal-body">
+      <div class="review-filters" data-review-filters>
+        <button type="button" class="review-filter-chip is-active" data-filter="all">All</button>
+        <button type="button" class="review-filter-chip" data-filter="5">5 <i class="fa-solid fa-star" aria-hidden="true"></i></button>
+        <button type="button" class="review-filter-chip" data-filter="4">4 <i class="fa-solid fa-star" aria-hidden="true"></i></button>
+        <button type="button" class="review-filter-chip" data-filter="3">3 <i class="fa-solid fa-star" aria-hidden="true"></i></button>
+      </div>
+      <div class="review-modal-grid" data-field="reviews-all"></div>
+      <div class="review-modal-empty" data-review-empty>No reviews match this filter yet.</div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      function load(src, cb) {
+        var s = document.createElement('script');
+        s.src = window.__fmiBase + src;
+        if (cb) s.onload = cb;
+        document.head.appendChild(s);
+      }
+      load('../js/main.js', function () { load('js/app.js'); });
+    })();
+  </script>
+</body>
+</html>

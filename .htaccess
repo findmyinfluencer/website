@@ -1,0 +1,12 @@
+# Local Apache/MAMP testing only — GitHub Pages ignores .htaccess entirely
+# and serves 404.html for any unmatched path automatically, no config
+# needed. This replicates that same behavior locally: Apache has no native
+# equivalent, so ErrorDocument does the same job — serve 404.html's content
+# (status 404, URL unchanged) for a path with no matching real file, such as
+# the pretty /p/<slug>/ profile URLs. 404.html itself already contains the
+# logic to tell a profile URL apart from a genuinely dead link.
+#
+# The path below is server-root-relative (MAMP's DocumentRoot is htdocs/,
+# so "website" is a real path segment locally) — once this repo's root is
+# the actual deployed site root, this file does nothing there anyway.
+ErrorDocument 404 /website/404.html

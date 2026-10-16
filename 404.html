@@ -10,22 +10,25 @@
   <!-- GitHub Pages has no .htaccess/mod_rewrite — this file is its one
        equivalent mechanism: it serves 404.html's content (status 404, but
        the address bar keeps the original URL) for ANY unmatched path across
-       the whole site, not just /p/<slug>/ ones. So this file does two jobs:
+       the whole site. Profile URLs are now bare single-segment paths —
+       /<slug>/ in production, or /website/<slug>/ in local testing (this
+       repo's root sits one level under MAMP's docroot, same known local
+       prefix used by the ErrorDocument directive in website/.htaccess) —
+       so path depth is what tells a profile request apart from anything
+       else. The profile template's own files (css/js/images) still live
+       under p/ — that folder didn't move, only the public URL dropped the
+       "/p/" segment, so the computed base points into p/ either way.
 
-       1. For a path that actually looks like .../p/<slug>/ (or bare .../p/),
-          it's byte-for-byte the same page as p/index.html — same
-          self-computing base (location.pathname tells it where "p" is,
-          independent of which physical file GitHub actually served) and
-          the same app.js, which already renders a sensible empty state when
-          there's no slug. Keep this in sync with p/index.html if that page
-          changes.
-       2. For anything else (a genuinely dead link), it shows a plain
-          "not found" message instead of trying to render a creator profile
-          for an unrelated URL. -->
+       1. A profile-shaped path renders byte-for-byte the same page as
+          p/index.html — same app.js (which already shows a sensible
+          "couldn't find that creator" message if the slug doesn't resolve).
+          Keep this in sync with p/index.html if that page changes.
+       2. Anything else (a genuinely dead/unrelated link) shows a plain
+          "not found" message instead. -->
   <script>
     (function () {
-      var parts = location.pathname.split("/");
-      var isProfilePath = parts.indexOf("p") !== -1;
+      var parts = location.pathname.split("/").filter(Boolean);
+      var isProfilePath = parts.length === 1 || (parts.length === 2 && parts[0] === "website");
 
       if (!isProfilePath) {
         // document.write only INSERTS content — it can't stop the parser
@@ -46,8 +49,10 @@
         return;
       }
 
-      var i = parts.lastIndexOf("p");
-      var base = (i >= 0 ? parts.slice(0, i + 1) : parts.slice(0, -1)).join("/") + "/";
+      // The root is everything except the last segment (the slug); p/'s
+      // own assets live one level under that root.
+      var root = parts.slice(0, -1);
+      var base = "/" + root.join("/") + (root.length ? "/" : "") + "p/";
       window.__fmiBase = base;
       document.write(
         '<base href="' + base + '">' +

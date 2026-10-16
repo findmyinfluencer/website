@@ -29,7 +29,7 @@
   }
 
   var slug = resolveSlug();
-  var source = slug ? "/api/influencer.php?slug=" + encodeURIComponent(slug) : null;
+  var source = slug ? "https://api.findmyinfluencer.com/influencer.php?slug=" + encodeURIComponent(slug) : null;
   var loadingEl = document.querySelector("[data-creator-loading]");
 
   if (!source) {

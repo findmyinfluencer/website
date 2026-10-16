@@ -259,7 +259,7 @@
           <p class="section-desc">Top performing creators actively looking for brand partnerships.</p>
         </div>
 
-        <div class="influencer-grid" data-source="data/influencers.json" data-limit="4" data-tail="true">
+        <div class="influencer-grid">
         </div>
 
         <div class="niche-more">
@@ -441,26 +441,51 @@
         setTimeout(scheduleShare, 5000);
       })();
 
-      // Featured influencers + open campaigns, rendered from JSON so either
-      // list can be updated by editing the data file — no HTML edits needed.
-      renderFromJson(".influencer-grid", function (inf) {
-        return (
-          '<a class="influencer-card ' + escapeHtml(inf.theme) + '" href="#">' +
-            '<div class="influencer-cover"><span class="influencer-badge">' + escapeHtml(inf.badge) + "</span></div>" +
-            '<div class="influencer-avatar">' + escapeHtml(inf.avatarInitials) + "</div>" +
-            '<div class="influencer-body">' +
-              "<h3>" + escapeHtml(inf.name) + "</h3>" +
-              '<p class="influencer-handle">' + escapeHtml(inf.handle) + "</p>" +
-              '<span class="influencer-pill">' + escapeHtml(inf.niche) + "</span>" +
-              '<div class="influencer-stats-row">' +
-                "<div><strong>" + escapeHtml(inf.followers) + '</strong><span><i class="fa-brands fa-' + escapeHtml(inf.platform) + '" aria-hidden="true"></i><span class="visually-hidden">' + escapeHtml(inf.platform) + "</span></span></div>" +
-                "<div><strong>" + escapeHtml(inf.engagement) + '</strong><span><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span class="visually-hidden">Engagement</span></span></div>' +
-                "<div><strong>" + escapeHtml(inf.state) + '</strong><span><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span class="visually-hidden">State</span></span></div>' +
-              "</div>" +
-            "</div>" +
-          "</a>"
-        );
-      });
+      // Featured influencers: top creators by followers, straight from the
+      // live API (not data/influencers.json — that file's gone, the
+      // database is the source of truth now, same as find-influencer.html).
+      // The API lists one row per account, so a creator with both Instagram
+      // and YouTube can appear twice in the raw results — dedupe by slug
+      // before taking the top 4 so this small showcase never repeats a name.
+      (function renderFeaturedInfluencers() {
+        var grid = document.querySelector(".influencer-grid");
+        if (!grid) return;
+
+        fetch("https://api.findmyinfluencer.com/influencers.php?page=1")
+          .then(function (res) {
+            if (!res.ok) throw new Error("Failed to load featured influencers");
+            return res.json();
+          })
+          .then(function (data) {
+            var seen = {};
+            var featured = [];
+            (data.results || []).forEach(function (inf) {
+              if (featured.length >= 4 || seen[inf.slug]) return;
+              seen[inf.slug] = true;
+              featured.push(inf);
+            });
+
+            grid.innerHTML = featured.map(function (inf) {
+              return (
+                '<a class="influencer-card ' + escapeHtml(inf.theme) + '" href="' + escapeHtml(inf.slug) + '/" target="_blank" rel="noopener">' +
+                  '<div class="influencer-cover"><span class="influencer-badge">' + escapeHtml(inf.badge) + "</span></div>" +
+                  '<div class="influencer-avatar">' + escapeHtml(inf.avatarInitials) + "</div>" +
+                  '<div class="influencer-body">' +
+                    "<h3>" + escapeHtml(inf.name) + "</h3>" +
+                    '<p class="influencer-handle">' + escapeHtml(inf.handle) + "</p>" +
+                    '<span class="influencer-pill">' + escapeHtml(inf.category) + "</span>" +
+                    '<div class="influencer-reach"><i class="fa-brands fa-' + escapeHtml(inf.platform) + '" aria-hidden="true"></i><strong>' + escapeHtml(inf.followers) + "</strong><span class=\"visually-hidden\">" + escapeHtml(inf.platform) + " followers</span></div>" +
+                    '<div class="influencer-stats-row">' +
+                      "<div><strong>" + escapeHtml(inf.language) + '</strong><span><i class="fa-solid fa-spell-check" aria-hidden="true"></i><span class="visually-hidden">Language</span></span></div>' +
+                      "<div><strong>" + escapeHtml(inf.city) + '</strong><span><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span class="visually-hidden">City</span></span></div>' +
+                    "</div>" +
+                  "</div>" +
+                "</a>"
+              );
+            }).join("");
+          })
+          .catch(function (err) { console.error(err); });
+      })();
 
       renderFromJson(".campaign-grid", function (c) {
         var tags = c.tags.map(function (t) { return "<span>" + escapeHtml(t) + "</span>"; }).join("");

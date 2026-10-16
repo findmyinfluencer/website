@@ -570,12 +570,12 @@
 }
 
 .influencer-body h3 {
-  font-size: 17px;
+  font-size: 18px;
   margin-bottom: 2px;
 }
 
 .influencer-handle {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--fmi-muted);
   margin-bottom: 12px;
 }
@@ -590,6 +590,32 @@
   border-radius: 100px;
   margin-bottom: 18px;
 }
+
+.influencer-reach {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.influencer-reach i {
+  font-size: 20px;
+  color: var(--fmi-muted);
+}
+
+.influencer-reach strong {
+  font-size: 15px;
+  color: var(--fmi-heading);
+}
+
+.influencer-reach .fa-instagram { color: #dd2a7b; }
+.influencer-reach .fa-youtube { color: #ff0000; }
+.influencer-reach .fa-facebook { color: #1877f2; }
+.influencer-reach .fa-linkedin { color: #0a66c2; }
+.influencer-reach .fa-pinterest { color: #e60023; }
+.influencer-reach .fa-snapchat { color: #d8d500; font-weight: 800; }
+.influencer-reach .fa-twitter { color: #1da1f2; }
 
 .influencer-stats-row {
   display: flex;
@@ -621,9 +647,7 @@
   color: var(--fmi-muted);
 }
 
-.influencer-stats-row .fa-instagram { color: #dd2a7b; }
-.influencer-stats-row .fa-youtube { color: #ff0000; }
-.influencer-stats-row .fa-chart-line { color: #10b981; }
+.influencer-stats-row .fa-spell-check { color: #10b981; }
 .influencer-stats-row .fa-location-dot { color: #3b82f6; }
 
 /* ---- Campaigns ---- */

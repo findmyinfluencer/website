@@ -178,55 +178,6 @@
 
               <button id="submitBtn" type="submit" class="btn btn-primary btn-block">Send Message</button>
             </form>
-            <script>
-              const form = document.getElementById('contactForm');
-              const submitBtn = document.getElementById('submitBtn');
-              const messageDiv = document.getElementById('message');
-              form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Sending...';
-                messageDiv.style.display = 'none';
-                // Get form values
-                const name = document.getElementById('name').value.trim();
-                const email = document.getElementById('email').value.trim();
-                const subject = document.getElementById('subject').value.trim();
-                const messageText = document.getElementById('message-text').value.trim();
-                // YOUR Google Form URL
-                const formURL = 'https://docs.google.com/forms/d/e/1FAIpQLSddnAlG7v2mh875G9fhxgXETTds56DL1IdOixNofI7nD7fSgw/formResponse';
-                // Create FormData with YOUR field IDs
-                const formData = new FormData();
-                formData.append('entry.691538370', name);
-                formData.append('entry.1327667417', email);
-                formData.append('entry.421505376', subject);
-                formData.append('entry.2001632591', messageText);
-                try {
-                  await fetch(formURL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: formData
-                  });
-                  // Show success message
-                  messageDiv.classList.add('is-visible');
-                  messageDiv.textContent = 'Message received successfully! We\'ll get back to you soon.';
-                  messageDiv.style.display = 'block';
-                  // Clear form
-                  form.reset();
-                  // Hide message after 5 seconds
-                  setTimeout(() => {
-                    messageDiv.style.display = 'none';
-                  }, 5000);
-                } catch (error) {
-                  // Show error message
-                  messageDiv.classList.add('is-error')
-                  messageDiv.textContent = 'Something went wrong. Please try again.';
-                  messageDiv.style.display = 'block';
-                } finally {
-                  submitBtn.disabled = false;
-                  submitBtn.textContent = 'Send Message';
-                }
-              });
-            </script>
           </div>
         </div>
       </div>

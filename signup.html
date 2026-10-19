@@ -111,64 +111,18 @@
                 <input type="tel" id="signup-phone" name="phone" placeholder="+91 XXXXX XXXXX" required>
               </div>
 
+              <div class="form-check">
+                <input type="checkbox" id="signup-terms" name="terms" required>
+                <label for="signup-terms">I agree to the <a href="terms-of-service.html" target="_blank" rel="noopener">Terms of Service</a> and <a href="privacy-policy.html" target="_blank" rel="noopener">Privacy Policy</a>.</label>
+              </div>
+
               <button type="submit" class="btn btn-primary btn-block" id="signupSubmitBtn">Register as Influencer</button>
             </form>
           </div>
         </div>
       </div>
     </section>
-    <script>
-      // Influencer signups only, for now — brand registration is hidden
-      // until that flow is ready.
-      const submitBtn = document.getElementById('signupSubmitBtn');
-      const form = document.getElementById('signupForm');
-      const messageDiv = document.getElementById('message');
 
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Sending...';
-        messageDiv.style.display = 'none';
-        // Get form values
-        const name = document.getElementById('signup-name').value.trim();
-        const email = document.getElementById('signup-email').value.trim();
-        const phone = document.getElementById('signup-phone').value.trim();
-        // YOUR Google Form URL
-        const formURL = 'https://docs.google.com/forms/d/e/1FAIpQLSdbADJz-IFfCXmoonz9R_Z6xzop61B-rC3ub8BEhmfBFe_PqA/formResponse';
-        // Create FormData with YOUR field IDs
-        const formData = new FormData();
-        formData.append('entry.1172266666', name);
-        formData.append('entry.178361927', email);
-        formData.append('entry.220222765', phone);
-        formData.append('entry.1879586251', 'Influencer');
-        try {
-          await fetch(formURL, {
-            method: 'POST',
-            mode: 'no-cors',
-            body: formData
-          });
-          // Show success message
-          messageDiv.classList.remove('is-error');
-          messageDiv.classList.add('is-visible');
-          messageDiv.textContent = 'Thanks! We\'ve received your details and will be in touch soon.';
-          messageDiv.style.display = 'block';
-          // Clear form
-          form.reset();
-          // Hide message after 5 seconds
-          setTimeout(() => {
-            messageDiv.style.display = 'none';
-          }, 5000);
-        } catch (error) {
-          // Show error message
-          messageDiv.classList.add('is-error');
-          messageDiv.textContent = 'Something went wrong. Please try again.';
-          messageDiv.style.display = 'block';
-        } finally {
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Register as Influencer';
-        }
-      });
-    </script>
     <div class="section-divider" aria-hidden="true"></div>
 
     <!-- CTA -->

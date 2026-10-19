@@ -569,19 +569,13 @@
   flex-shrink: 0;
 }
 
-.blog-more {
-  text-align: center;
-  margin-top: 40px;
-}
-
 /* Reuse the same tinted icon-badge palette as the value/quick-contact cards */
 .blog-card-icon.c-pink { color: #ec4899; background: #ffe3ef; }
 .blog-card-icon.c-peach { color: #f59e0b; background: #fff2d6; }
 .blog-card-icon.c-blue { color: #3b82f6; background: #dce8ff; }
 .blog-card-icon.c-purple { color: #8b5cf6; background: #ece4ff; }
 
-.blog-card.is-hidden,
-.blog-more.is-hidden {
+.blog-card.is-hidden {
   display: none;
 }
 
@@ -1040,10 +1034,19 @@
   overflow: hidden;
 }
 
+/* 10 colors, assigned by card position (see main.js's INFLUENCER_THEMES) and
+   repeating every 10 cards — not read from the database, so adding a color
+   here only ever means adding one more entry to that array too. */
 .theme-pink .influencer-cover { background: linear-gradient(135deg, #ffd3e2, #ffb0cd); }
 .theme-peach .influencer-cover { background: linear-gradient(135deg, #ffe2bd, #ffc48a); }
 .theme-blue .influencer-cover { background: linear-gradient(135deg, #d1e4ff, #a6cbff); }
 .theme-purple .influencer-cover { background: linear-gradient(135deg, #e8ddff, #cdb6ff); }
+.theme-green .influencer-cover { background: linear-gradient(135deg, #d7f5de, #a8e6b8); }
+.theme-teal .influencer-cover { background: linear-gradient(135deg, #cdf3ee, #9ee3da); }
+.theme-coral .influencer-cover { background: linear-gradient(135deg, #ffdcd3, #ffb3a1); }
+.theme-indigo .influencer-cover { background: linear-gradient(135deg, #dde0ff, #b8bfff); }
+.theme-amber .influencer-cover { background: linear-gradient(135deg, #fff2c2, #ffe08a); }
+.theme-cyan .influencer-cover { background: linear-gradient(135deg, #d2f4fb, #a3e8f5); }
 
 .influencer-badge {
   position: absolute;
@@ -1078,6 +1081,12 @@
 .theme-peach .influencer-avatar { background: #ff9a3c; }
 .theme-blue .influencer-avatar { background: #3b82f6; }
 .theme-purple .influencer-avatar { background: #8b5cf6; }
+.theme-green .influencer-avatar { background: #22c55e; }
+.theme-teal .influencer-avatar { background: #14b8a6; }
+.theme-coral .influencer-avatar { background: #f4634c; }
+.theme-indigo .influencer-avatar { background: #6366f1; }
+.theme-amber .influencer-avatar { background: #f59e0b; }
+.theme-cyan .influencer-avatar { background: #06b6d4; }
 
 .influencer-body {
   text-align: center;
@@ -1414,19 +1423,28 @@
 
 .form-check {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 10px;
   margin-bottom: 20px;
 }
 
 .form-check input {
-  margin-top: 3px;
   flex-shrink: 0;
 }
 
 .form-check label {
   font-size: 14px;
+  line-height: 1.5;
   color: var(--fmi-body);
+}
+
+.form-check label a {
+  color: var(--fmi-primary);
+  text-decoration: underline;
+}
+
+.form-check label a:hover {
+  color: var(--fmi-primary-dark);
 }
 
 .coming-soon-card {
@@ -1513,15 +1531,19 @@
   box-shadow: 0 0 0 3px var(--fmi-primary-light);
 }
 
-.filter-selects {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
+/* Multiselect dropdown — a button styled like the old <select> that opens a
+   checkbox list panel, so every filter can take more than one value. */
+.ms-select {
+  position: relative;
 }
 
-.filter-selects select {
+.ms-trigger {
   width: 100%;
-  padding: 11px 36px 11px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 11px 14px;
   font-family: inherit;
   font-size: 14px;
   font-weight: 600;
@@ -1529,20 +1551,92 @@
   border: 1px solid var(--fmi-border);
   border-radius: var(--fmi-radius-sm);
   background-color: var(--fmi-light);
-  background-image: linear-gradient(45deg, transparent 50%, var(--fmi-muted) 50%), linear-gradient(135deg, var(--fmi-muted) 50%, transparent 50%);
-  background-position: calc(100% - 18px) center, calc(100% - 13px) center;
-  background-size: 5px 5px, 5px 5px;
-  background-repeat: no-repeat;
-  appearance: none;
   cursor: pointer;
   transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
 }
 
-.filter-selects select:focus {
+.ms-trigger-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ms-trigger i {
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--fmi-muted);
+  transition: transform 0.15s ease;
+}
+
+.ms-select.is-open .ms-trigger i {
+  transform: rotate(180deg);
+}
+
+.ms-trigger:focus-visible,
+.ms-select.is-open .ms-trigger {
   outline: none;
   border-color: var(--fmi-primary);
   background-color: var(--fmi-white);
   box-shadow: 0 0 0 3px var(--fmi-primary-light);
+}
+
+.ms-select.has-selection .ms-trigger {
+  border-color: var(--fmi-primary);
+  color: var(--fmi-primary);
+}
+
+.ms-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 20;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  width: max(100%, 200px);
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 8px;
+  background: var(--fmi-white);
+  border: 1px solid var(--fmi-border);
+  border-radius: var(--fmi-radius-sm);
+  box-shadow: var(--fmi-shadow-lg);
+}
+
+.ms-select.is-open .ms-panel {
+  display: flex;
+}
+
+/* Added by JS (createMultiSelect) when there isn't enough room below the
+   trigger to fit the panel — e.g. a filter near the bottom of the side
+   panel's scrollable list — so it opens upward instead of pushing the
+   scroll area out further. */
+.ms-select.opens-up .ms-panel {
+  top: auto;
+  bottom: calc(100% + 6px);
+}
+
+.ms-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fmi-body);
+  border-radius: var(--fmi-radius-sm);
+  cursor: pointer;
+}
+
+.ms-option:hover {
+  background: var(--fmi-light);
+}
+
+.ms-option input {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  accent-color: var(--fmi-primary);
 }
 
 .filter-reset-btn {
@@ -1566,11 +1660,209 @@
   color: var(--fmi-primary);
 }
 
+/* "Filters" button that opens the side panel — all 10 filters live there
+   instead of cluttering the main page with a dense grid of dropdowns. */
+.filters-toggle-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 18px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fmi-heading);
+  background: var(--fmi-light);
+  border: 1px solid var(--fmi-border);
+  border-radius: var(--fmi-radius-sm);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+}
+
+.filters-toggle-btn:hover,
+.filters-toggle-btn[aria-expanded="true"] {
+  border-color: var(--fmi-primary);
+  color: var(--fmi-primary);
+  background: var(--fmi-primary-light);
+}
+
+.filters-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--fmi-white);
+  background: var(--fmi-primary);
+  border-radius: 999px;
+}
+
+.filters-count-badge[hidden] {
+  display: none;
+}
+
+/* Active-filter chips — the whole reason for this redesign: every selected
+   value stays visible on the main page (not just inside the panel), and
+   each one can be removed on its own without reopening the panel. */
+.active-filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.active-filter-chips[hidden] {
+  display: none;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fmi-primary);
+  background: var(--fmi-primary-light);
+  border-radius: 999px;
+}
+
+.filter-chip button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-size: 11px;
+  color: var(--fmi-primary);
+  background: var(--fmi-white);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.filter-chip button:hover {
+  color: var(--fmi-white);
+  background: var(--fmi-primary);
+}
+
+/* Filters side panel — above .site-header's z-index: 900 (the highest
+   other z-index on this page) with headroom to spare, now that this panel
+   is a direct child of <body> and can actually use it (see the HTML
+   comment above these elements for why that placement matters). */
+.filters-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 950;
+  background: rgba(20, 24, 40, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.filters-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.filters-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 951;
+  display: flex;
+  flex-direction: column;
+  width: 420px;
+  max-width: 90vw;
+  background: var(--fmi-white);
+  box-shadow: var(--fmi-shadow-lg);
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+}
+
+.filters-panel.is-open {
+  transform: translateX(0);
+}
+
+.filters-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--fmi-border);
+}
+
+.filters-panel-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--fmi-heading);
+  margin: 0;
+}
+
+.filters-panel-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  font-size: 15px;
+  color: var(--fmi-body);
+  background: var(--fmi-light);
+  border: 1px solid var(--fmi-border);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.filters-panel-close:hover {
+  border-color: var(--fmi-primary);
+  color: var(--fmi-primary);
+}
+
+.filters-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.filters-panel-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filters-panel-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fmi-heading);
+}
+
+.filters-panel-footer {
+  flex-shrink: 0;
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--fmi-border);
+}
+
+.filters-panel-footer .btn {
+  flex: 1;
+}
+
 .find-results-meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-top: 36px;
   font-size: 14px;
   color: var(--fmi-muted);
 }
@@ -1728,10 +2020,6 @@
   .campaign-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  .filter-selects {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 @media (max-width: 640px) {
@@ -1771,22 +2059,12 @@
     grid-template-columns: 1fr;
   }
 
-  .filter-selects {
-    grid-template-columns: 1fr;
-  }
-
   .filter-search-row {
     flex-wrap: wrap;
   }
 
   .filter-search {
     flex-basis: 100%;
-  }
-
-  .find-results-meta {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
   }
 
   .form-row {

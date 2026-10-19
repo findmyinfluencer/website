@@ -201,40 +201,5 @@
   </footer>
 
   <script src="../js/main.js"></script>
-  <script>
-    // Related posts: render the blog-card grid from data/blog-posts.json.
-    // No pagination needed here (the grid is capped via data-limit).
-    (function () {
-      "use strict";
-
-      var escapeHtml = window.FMI.escapeHtml;
-      var renderFromJson = window.FMI.renderFromJson;
-
-      renderFromJson(".blog-grid", function (post, grid) {
-        var base = grid.getAttribute("data-base") || "";
-        var iconColor = post.theme.replace("theme-", "c-");
-        return (
-          '<a class="blog-card" href="' + escapeHtml(base + post.slug) + '">' +
-            '<div class="blog-card-body">' +
-              '<div class="blog-card-top">' +
-                '<span class="blog-card-icon ' + escapeHtml(iconColor) + '"><i class="fa-solid ' + escapeHtml(post.icon) + '" aria-hidden="true"></i></span>' +
-                '<span class="blog-card-tag">' + escapeHtml(post.category) + "</span>" +
-              "</div>" +
-              "<h3>" + escapeHtml(post.title) + "</h3>" +
-              "<p>" + escapeHtml(post.excerpt) + "</p>" +
-              '<div class="blog-card-meta">' +
-                '<span class="author-initials">' + escapeHtml(post.authorInitials) + "</span>" +
-                "<span>" + escapeHtml(post.author) + "</span>" +
-                "<span>·</span>" +
-                "<span>" + escapeHtml(post.date) + "</span>" +
-                "<span>·</span>" +
-                "<span>" + escapeHtml(post.readTime) + "</span>" +
-              "</div>" +
-            "</div>" +
-          "</a>"
-        );
-      });
-    })();
-  </script>
 </body>
 </html>

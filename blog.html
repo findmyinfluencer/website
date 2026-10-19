@@ -27,6 +27,9 @@
 
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/pages.css">
+  <!-- Scoped to this page only — global.css's .section rule (padding:
+       96px 0) is shared by every page on the site. -->
+  <style>#main-content .section:nth-child(2) { padding-top: 20px; }</style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-2Q8GX0FJ85"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -79,16 +82,15 @@
       </div>
     </section>
 
-    <div class="section-divider" aria-hidden="true"></div>
-
     <!-- Post grid -->
     <section class="section">
       <div class="container">
         <div class="blog-grid" data-source="data/blog-posts.json" data-base="blog/" data-reverse="true">
         </div>
 
-        <div class="blog-more">
-          <button type="button" class="btn btn-outline"><i class="fa-solid fa-arrows-rotate"></i>Load More Articles</button>
+        <div class="find-results-meta">
+          <span id="blogResultsCount"></span>
+          <nav class="find-pagination find-pagination-compact" id="blogPagination" aria-label="Blog pages"></nav>
         </div>
       </div>
     </section>
@@ -166,67 +168,5 @@
   </footer>
 
   <script src="js/main.js"></script>
-  <script>
-    // Blog home: render the post grid from data/blog-posts.json, then
-    // paginate it with "Load More Articles".
-    (function () {
-      "use strict";
-
-      var escapeHtml = window.FMI.escapeHtml;
-      var renderFromJson = window.FMI.renderFromJson;
-
-      var BLOG_PAGE_SIZE = 9;
-
-      renderFromJson(".blog-grid", function (post, grid) {
-        var base = grid.getAttribute("data-base") || "";
-        var iconColor = post.theme.replace("theme-", "c-");
-        return (
-          '<a class="blog-card" href="' + escapeHtml(base + post.slug) + '">' +
-            '<div class="blog-card-body">' +
-              '<div class="blog-card-top">' +
-                '<span class="blog-card-icon ' + escapeHtml(iconColor) + '"><i class="fa-solid ' + escapeHtml(post.icon) + '" aria-hidden="true"></i></span>' +
-                '<span class="blog-card-tag">' + escapeHtml(post.category) + "</span>" +
-              "</div>" +
-              "<h3>" + escapeHtml(post.title) + "</h3>" +
-              "<p>" + escapeHtml(post.excerpt) + "</p>" +
-              '<div class="blog-card-meta">' +
-                '<span class="author-initials">' + escapeHtml(post.authorInitials) + "</span>" +
-                "<span>" + escapeHtml(post.author) + "</span>" +
-                "<span>·</span>" +
-                "<span>" + escapeHtml(post.date) + "</span>" +
-                "<span>·</span>" +
-                "<span>" + escapeHtml(post.readTime) + "</span>" +
-              "</div>" +
-            "</div>" +
-          "</a>"
-        );
-      }, function initBlogListing(grid) {
-        var loadMoreBtn = document.querySelector(".blog-more .btn");
-        var loadMoreWrap = document.querySelector(".blog-more");
-        var shownCount = BLOG_PAGE_SIZE;
-
-        function render() {
-          var all = Array.prototype.slice.call(grid.querySelectorAll(".blog-card"));
-          all.forEach(function (card, index) {
-            card.classList.toggle("is-hidden", index >= shownCount);
-          });
-
-          if (loadMoreWrap) {
-            loadMoreWrap.classList.toggle("is-hidden", all.length <= shownCount);
-          }
-        }
-
-        if (loadMoreBtn) {
-          loadMoreBtn.addEventListener("click", function (event) {
-            event.preventDefault();
-            shownCount += BLOG_PAGE_SIZE;
-            render();
-          });
-        }
-
-        render();
-      });
-    })();
-  </script>
 </body>
 </html>

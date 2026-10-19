@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Find Influencer — Find My Influencer</title>
-  <meta name="description" content="Search and filter verified creators in Chennai by category, platform, city, language and follower count on Find My Influencer.">
+  <meta name="description" content="Search and filter verified creators in Chennai by category, platform, city, state, language, follower count and more on Find My Influencer.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://findmyinfluencer.com/find-influencer.html">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Find My Influencer">
   <meta property="og:title" content="Find Influencer — Find My Influencer">
-  <meta property="og:description" content="Search and filter verified creators by category, platform, city, language and follower count.">
+  <meta property="og:description" content="Search and filter verified creators by category, platform, city, state, language, follower count and more.">
   <meta property="og:url" content="https://findmyinfluencer.com/find-influencer.html">
   <meta property="og:image" content="/images/favicon-512.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -75,7 +75,7 @@
           <span>Find Influencer</span>
         </div>
         <h1>Find Your Perfect <span class="highlight">Influencer</span></h1>
-        <p>Search and filter verified creators by category, platform, city, language and follower count. Starting in Chennai, with more cities added every week.</p>
+        <p>Search and filter verified creators by category, platform, city, state, language, follower count and more. Starting in Chennai, with more cities added every week.</p>
       </div>
     </section>
 
@@ -84,42 +84,30 @@
     <section class="section section-flush-top">
       <div class="container">
         <div class="find-filter-bar">
-          <div class="filter-selects">
-            <select id="filterCategory" aria-label="Filter by category">
-              <option value="">All Categories</option>
-            </select>
-            <select id="filterPlatform" aria-label="Filter by platform">
-              <option value="">All Platforms</option>
-            </select>
-            <select id="filterCity" aria-label="Filter by city">
-              <option value="">All Cities</option>
-            </select>
-            <select id="filterLanguage" aria-label="Filter by language">
-              <option value="">All Languages</option>
-            </select>
-            <select id="filterFollowers" aria-label="Filter by follower count">
-              <option value="">Any Follower Count</option>
-            </select>
-          </div>
-
           <div class="filter-search-row">
             <div class="filter-search">
               <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
               <input type="text" id="filterSearch" placeholder="Search by name or handle...">
             </div>
-            <button type="button" id="applyFilters" class="btn btn-primary btn-sm">Apply Filters</button>
+            <button type="button" id="openFiltersBtn" class="filters-toggle-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="filtersPanel">
+              <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+              Filters
+              <span class="filters-count-badge" id="filtersCountBadge" hidden>0</span>
+            </button>
             <button type="button" id="clearFilters" class="filter-reset-btn" aria-label="Reset filters" title="Reset filters">
               <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
             </button>
           </div>
-        </div>
 
-        <div class="find-results-meta">
-          <span id="resultsCount"><strong>16</strong> creators found</span>
-          <nav class="find-pagination find-pagination-compact" id="findPaginationTop" aria-label="Search results pages"></nav>
+          <div class="active-filter-chips" id="activeFilterChips" hidden></div>
         </div>
 
         <div class="influencer-grid" id="findResultsGrid">
+        </div>
+
+        <div class="find-results-meta">
+          <span id="resultsCount"><strong>10K+</strong> creators found</span>
+          <nav class="find-pagination find-pagination-compact" id="findPagination" aria-label="Search results pages"></nav>
         </div>
       </div>
     </section>
@@ -196,195 +184,132 @@
     </div>
   </footer>
 
+  <!-- Filters side panel: a direct child of <body>, not nested inside any
+       .container (every .container on this site is `position: relative;
+       z-index: 1`, which would trap this panel's `position: fixed` inside
+       that stacking context — capping it at z-index 1 page-wide instead of
+       letting it actually sit above everything, header and later sections
+       included). Every multiselect lives in here so the main page only
+       ever shows a single "Filters" button + the chips for whatever's
+       actually selected (see js/main.js, initFindInfluencerPage). -->
+  <div class="filters-overlay" id="filtersOverlay" hidden></div>
+  <aside class="filters-panel" id="filtersPanel" aria-hidden="true" aria-label="Filters">
+    <div class="filters-panel-header">
+      <h2>Filters</h2>
+      <button type="button" id="closeFiltersBtn" class="filters-panel-close" aria-label="Close filters">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="filters-panel-body">
+      <div class="filters-panel-group">
+        <span class="filters-panel-label">Category</span>
+        <div class="ms-select" id="msCategory" data-placeholder="All Categories">
+          <button type="button" class="ms-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Filter by category">
+            <span class="ms-trigger-label">All Categories</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="ms-panel" role="listbox" aria-multiselectable="true"></div>
+        </div>
+      </div>
+      <div class="filters-panel-group">
+        <span class="filters-panel-label">Platform</span>
+        <div class="ms-select" id="msPlatform" data-placeholder="All Platforms">
+          <button type="button" class="ms-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Filter by platform">
+            <span class="ms-trigger-label">All Platforms</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="ms-panel" role="listbox" aria-multiselectable="true"></div>
+        </div>
+      </div>
+      <div class="filters-panel-group">
+        <span class="filters-panel-label">State</span>
+        <div class="ms-select" id="msState" data-placeholder="All States">
+          <button type="button" class="ms-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Filter by state">
+            <span class="ms-trigger-label">All States</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="ms-panel" role="listbox" aria-multiselectable="true"></div>
+        </div>
+      </div>
+      <div class="filters-panel-group">
+        <span class="filters-panel-label">City</span>
+        <div class="ms-select" id="msCity" data-placeholder="All Cities">
+          <button type="button" class="ms-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Filter by city">
+            <span class="ms-trigger-label">All Cities</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="ms-panel" role="listbox" aria-multiselectable="true"></div>
+        </div>
+      </div>
+      <div class="filters-panel-group">
+        <span class="filters-panel-label">Language</span>
+        <div class="ms-select" id="msLanguage" data-placeholder="All Languages">
+          <button type="button" class="ms-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Filter by language">
+            <span class="ms-trigger-label">All Languages</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="ms-panel" role="listbox" aria-multiselectable="true"></div>
+        </div>
+      </div>
+      <div class="filters-panel-group">
+        <span class="filters-panel-label">Gender</span>
+        <div class="ms-select" id="msGender" data-placeholder="All Genders">
+          <button type="button" class="ms-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Filter by gender">
+            <span class="ms-trigger-label">All Genders</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="ms-panel" role="listbox" aria-multiselectable="true"></div>
+        </div>
+      </div>
+      <div class="filters-panel-group">
+        <span class="filters-panel-label">Age</span>
+        <div class="ms-select" id="msAge" data-placeholder="All Ages">
+          <button type="button" class="ms-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Filter by age">
+            <span class="ms-trigger-label">All Ages</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="ms-panel" role="listbox" aria-multiselectable="true"></div>
+        </div>
+      </div>
+      <div class="filters-panel-group">
+        <span class="filters-panel-label">Follower Count</span>
+        <div class="ms-select" id="msFollowers" data-placeholder="Any Follower Count">
+          <button type="button" class="ms-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Filter by follower count">
+            <span class="ms-trigger-label">Any Follower Count</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="ms-panel" role="listbox" aria-multiselectable="true"></div>
+        </div>
+      </div>
+      <div class="filters-panel-group">
+        <span class="filters-panel-label">Budget</span>
+        <div class="ms-select" id="msBudget" data-placeholder="Any Budget">
+          <button type="button" class="ms-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Filter by budget">
+            <span class="ms-trigger-label">Any Budget</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="ms-panel" role="listbox" aria-multiselectable="true"></div>
+        </div>
+      </div>
+      <div class="filters-panel-group">
+        <span class="filters-panel-label">Creator Status</span>
+        <div class="ms-select" id="msStatus" data-placeholder="All Statuses">
+          <button type="button" class="ms-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Filter by creator status">
+            <span class="ms-trigger-label">All Statuses</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="ms-panel" role="listbox" aria-multiselectable="true"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="filters-panel-footer">
+      <button type="button" id="panelClearFilters" class="btn btn-outline btn-sm">Clear All</button>
+      <button type="button" id="panelApplyFilters" class="btn btn-primary btn-sm">Apply Filters</button>
+    </div>
+  </aside>
+
   <script src="js/main.js"></script>
-  <script>
-    // Find Influencer page: live search + filters over data/influencers.json,
-    // with a free-signup card always pinned to the end of the results.
-    (function initFindInfluencerPage() {
-      "use strict";
-
-      var escapeHtml = window.FMI.escapeHtml;
-
-      var grid = document.getElementById("findResultsGrid");
-      if (!grid) return;
-
-      var searchInput = document.getElementById("filterSearch");
-      var categorySelect = document.getElementById("filterCategory");
-      var platformSelect = document.getElementById("filterPlatform");
-      var citySelect = document.getElementById("filterCity");
-      var languageSelect = document.getElementById("filterLanguage");
-      var followersSelect = document.getElementById("filterFollowers");
-      var clearBtn = document.getElementById("clearFilters");
-      var applyBtn = document.getElementById("applyFilters");
-      var resultsCount = document.getElementById("resultsCount");
-      var pagination = document.getElementById("findPaginationTop");
-
-      function renderCard(inf) {
-        return (
-          '<a class="influencer-card ' + escapeHtml(inf.theme) + '" href="' + escapeHtml(inf.slug) + '/" target="_blank" rel="noopener">' +
-            '<div class="influencer-cover"><span class="influencer-badge">' + escapeHtml(inf.badge) + "</span></div>" +
-            '<div class="influencer-avatar">' + escapeHtml(inf.avatarInitials) + "</div>" +
-            '<div class="influencer-body">' +
-              "<h3>" + escapeHtml(inf.name) + "</h3>" +
-              '<p class="influencer-handle">' + escapeHtml(inf.handle) + "</p>" +
-              '<span class="influencer-pill">' + escapeHtml(inf.category) + "</span>" +
-              '<div class="influencer-reach"><i class="fa-brands fa-' + escapeHtml(inf.platform) + '" aria-hidden="true"></i><strong>' + escapeHtml(inf.followers) + "</strong><span class=\"visually-hidden\">" + escapeHtml(inf.platform) + " followers</span></div>" +
-              '<div class="influencer-stats-row">' +
-                "<div><strong>" + escapeHtml(inf.language) + '</strong><span><i class="fa-solid fa-spell-check" aria-hidden="true"></i><span class="visually-hidden">Language</span></span></div>' +
-                "<div><strong>" + escapeHtml(inf.city) + '</strong><span><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span class="visually-hidden">City</span></span></div>' +
-              "</div>" +
-            "</div>" +
-          "</a>"
-        );
-      }
-
-      var API_URL = "https://api.findmyinfluencer.com/influencers.php";
-      var FILTERS_URL = "data/filters.json";
-      var fetchToken = 0;
-      var currentPage = 1;
-
-      // Category/city/language/platform/followers option ids live in one
-      // place — website/data/filters.json — shared with the backend
-      // (api/lib/filters.php) so search always runs on the indexed numeric
-      // id, never label text. Adding/renaming an option only ever means
-      // editing that one file.
-      function populateSelect(select, idToLabel) {
-        var current = select.value;
-        select.querySelectorAll("option[data-dynamic]").forEach(function (opt) { opt.remove(); });
-        Object.keys(idToLabel).forEach(function (id) {
-          var option = document.createElement("option");
-          option.value = id;
-          option.textContent = idToLabel[id];
-          option.setAttribute("data-dynamic", "");
-          select.appendChild(option);
-        });
-        if (current) select.value = current;
-      }
-
-      function loadFilterOptions() {
-        fetch(FILTERS_URL)
-          .then(function (res) {
-            if (!res.ok) throw new Error("Failed to load " + FILTERS_URL);
-            return res.json();
-          })
-          .then(function (filters) {
-            populateSelect(categorySelect, filters.categories || {});
-            populateSelect(citySelect, filters.cities || {});
-            populateSelect(languageSelect, filters.languages || {});
-            populateSelect(platformSelect, filters.platforms || {});
-            populateSelect(followersSelect, filters.followers || {});
-          })
-          .catch(function (err) { console.error(err); });
-      }
-
-      function renderPagination(page, totalPages, total, pageSize) {
-        if (!pagination) return;
-
-        // Only hide entirely when there's nothing to page through. A single
-        // page still shows its range (e.g. "1 - 7") with both arrows
-        // disabled, so the control doesn't disappear every time a filter
-        // narrows the results below one page — it only goes away when there
-        // are zero results.
-        if (total <= 0) {
-          pagination.innerHTML = "";
-          return;
-        }
-
-        var rangeStart = (page - 1) * pageSize + 1;
-        var rangeEnd = Math.min(page * pageSize, total);
-
-        pagination.innerHTML =
-          '<button type="button" class="page-nav-btn" data-page="' + (page - 1) + '"' + (page === 1 ? " disabled" : "") + '>' +
-            '<i class="fa-solid fa-chevron-left" aria-hidden="true"></i><span class="visually-hidden">Previous page</span>' +
-          "</button>" +
-          '<span class="page-range">' + rangeStart + " - " + rangeEnd + "</span>" +
-          '<button type="button" class="page-nav-btn" data-page="' + (page + 1) + '"' + (page === totalPages ? " disabled" : "") + '>' +
-            '<i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span class="visually-hidden">Next page</span>' +
-          "</button>";
-      }
-
-      function applyFilters(resetPage) {
-        if (resetPage) currentPage = 1;
-
-        var params = new URLSearchParams();
-        var query = searchInput.value.trim();
-        if (query) params.set("q", query);
-        if (categorySelect.value) params.set("category", categorySelect.value);
-        if (platformSelect.value) params.set("platform", platformSelect.value);
-        if (citySelect.value) params.set("city", citySelect.value);
-        if (languageSelect.value) params.set("language", languageSelect.value);
-        if (followersSelect.value) params.set("followers", followersSelect.value);
-        params.set("page", currentPage);
-
-        var thisFetch = ++fetchToken;
-
-        fetch(API_URL + "?" + params.toString())
-          .then(function (res) {
-            if (!res.ok) throw new Error("Failed to load " + API_URL);
-            return res.json();
-          })
-          .then(function (data) {
-            if (thisFetch !== fetchToken) return; // a newer request superseded this one
-
-            var pageResults = data.results || [];
-            var total = typeof data.total === "number" ? data.total : pageResults.length;
-            var cardsHtml = pageResults.length
-              ? pageResults.map(renderCard).join("")
-              : '<p class="find-empty-state">No creators match these filters yet. Try widening your search.</p>';
-
-            grid.innerHTML = cardsHtml;
-
-            if (resultsCount) {
-              resultsCount.innerHTML = "<strong>" + total + "</strong> creator" + (total === 1 ? "" : "s") + " found";
-            }
-
-            currentPage = data.page || currentPage;
-            renderPagination(currentPage, data.totalPages || 1, total, data.pageSize || 20);
-          })
-          .catch(function (err) {
-            console.error(err);
-            grid.innerHTML = '<p class="find-empty-state">Couldn\'t load creators right now. Please try again shortly.</p>';
-            if (pagination) pagination.innerHTML = "";
-          });
-      }
-
-      loadFilterOptions();
-      applyFilters(true);
-
-      // Filter inputs no longer trigger a request on every keystroke/change —
-      // that fired one API call per edit when adjusting several filters in a
-      // row. Changes are now batched and only sent when "Apply Filters" is
-      // clicked (or Enter is pressed in the search box).
-      if (applyBtn) {
-        applyBtn.addEventListener("click", function () { applyFilters(true); });
-      }
-      searchInput.addEventListener("keydown", function (e) {
-        if (e.key === "Enter") applyFilters(true);
-      });
-
-      if (pagination) {
-        pagination.addEventListener("click", function (e) {
-          var btn = e.target.closest(".page-nav-btn");
-          if (!btn || btn.disabled) return;
-          var page = parseInt(btn.getAttribute("data-page"), 10);
-          if (!page || page === currentPage) return;
-          currentPage = page;
-          applyFilters(false);
-        });
-      }
-
-      if (clearBtn) {
-        clearBtn.addEventListener("click", function () {
-          searchInput.value = "";
-          categorySelect.value = "";
-          platformSelect.value = "";
-          citySelect.value = "";
-          languageSelect.value = "";
-          followersSelect.value = "";
-          applyFilters(true);
-        });
-      }
-    })();
-  </script>
 </body>
 </html>

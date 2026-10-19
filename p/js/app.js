@@ -1,13 +1,15 @@
 (function () {
   "use strict";
 
-  // Public creator profile page. Content is rendered from
-  // /api/influencer.php?slug=<slug>, backed by fmi_launch.influencer_profiles.
-  // The slug comes from the pretty URL /p/<slug>/ (rewritten by .htaccess to
-  // index.html?slug=<slug>), the raw query string, or the data-creator-source
-  // attribute as a last-resort fallback for local testing.
-
-  var escapeHtml = window.FMI.escapeHtml;
+  // Creator profile page. Fetches /api/influencer-detail.php?slug=<slug>
+  // and fills the data-field/data-creator-section hooks in index.html. This
+  // page serves only from p/ — no dependency on website/js/main.js or
+  // website/css, so escapeHtml is a local copy, not a shared import.
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, function (ch) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+    });
+  }
 
   var main = document.getElementById("main-content");
   if (!main) return;
@@ -18,7 +20,7 @@
 
     var pathParts = window.location.pathname.split("/").filter(Boolean);
     var last = pathParts[pathParts.length - 1];
-    if (last && last !== "index.html" && last !== "p") return last;
+    if (last && !/\.html$/.test(last) && last !== "profile") return last;
 
     var fallback = main.getAttribute("data-creator-source");
     if (fallback) {
@@ -29,7 +31,7 @@
   }
 
   var slug = resolveSlug();
-  var source = slug ? "https://api.findmyinfluencer.com/influencer.php?slug=" + encodeURIComponent(slug) : null;
+  var source = slug ? "/api/influencer-detail.php?slug=" + encodeURIComponent(slug) : null;
   var loadingEl = document.querySelector("[data-creator-loading]");
 
   if (!source) {
@@ -37,104 +39,155 @@
     return;
   }
 
-  function starsHtml(rating) {
-    var html = "";
-    for (var i = 1; i <= 5; i++) {
-      if (rating >= i) {
-        html += '<i class="fa-solid fa-star" aria-hidden="true"></i>';
-      } else if (rating >= i - 0.5) {
-        html += '<i class="fa-solid fa-star-half-stroke" aria-hidden="true"></i>';
-      } else {
-        html += '<i class="fa-regular fa-star" aria-hidden="true"></i>';
-      }
-    }
-    return html;
-  }
-
   var PLATFORM_ICON = {
     instagram: "fa-instagram",
     youtube: "fa-youtube",
     facebook: "fa-facebook",
-    linkedin: "fa-linkedin-in"
+    linkedin: "fa-linkedin-in",
+    snapchat: "fa-snapchat",
+    twitter: "fa-twitter",
+    pinterest: "fa-pinterest"
   };
 
-  function renderTags(categories) {
-    return categories
-      .map(function (c) {
-        return '<span class="creator-tag c-' + escapeHtml(c.color) + '">' + escapeHtml(c.label) + "</span>";
-      })
-      .join("");
-  }
-
-  var STAT_COLORS = ["c-violet", "c-pink", "c-blue", "c-emerald"];
-
-  function renderStats(stats) {
-    return stats
-      .map(function (s, i) {
+  // Category/budget/language/gender/age — profile-level facts from the
+  // database (same filters.json ids as every other field on the site),
+  // shown as a labeled "quick facts" strip in the hero banner in this
+  // fixed order, one icon+label+value per fact. Every icon sits in a
+  // fixed-size circular badge regardless of that icon's own natural glyph
+  // size, so a visually "heavier" glyph never throws off alignment the way
+  // it did as a plain inline icon. Any fact can be null for an older/
+  // incomplete profile, so missing values are skipped rather than shown
+  // empty — category comes from `categories[0]`, the rest are plain
+  // string fields.
+  var META_FACT_ORDER = ["category", "budget", "language", "gender", "age"];
+  var META_FACT_ICON = {
+    category: "fa-tag",
+    budget: "fa-sack-dollar",
+    language: "fa-globe",
+    gender: "fa-venus-mars",
+    age: "fa-cake-candles"
+  };
+  // 5-color set, one per fact, so each reads as a distinct accent instead
+  // of every icon sharing one uniform violet circle.
+  var META_FACT_COLOR = {
+    category: "c-amber",
+    budget: "c-emerald",
+    language: "c-blue",
+    gender: "c-pink",
+    age: "c-violet"
+  };
+  var META_FACT_LABEL = {
+    category: "Category",
+    budget: "Budget",
+    language: "Language",
+    gender: "Gender",
+    age: "Age"
+  };
+  function renderMetaChips(creator) {
+    var values = {
+      category: creator.categories && creator.categories[0] ? creator.categories[0].label : null,
+      budget: creator.budget,
+      language: creator.language,
+      gender: creator.gender,
+      age: creator.age
+    };
+    return META_FACT_ORDER
+      .filter(function (key) { return values[key]; })
+      .map(function (key) {
         return (
-          '<div class="stat-band-item ' + STAT_COLORS[i % STAT_COLORS.length] + '"><strong>' + escapeHtml(s.value) + "</strong><span>" + escapeHtml(s.label) + "</span></div>"
+          '<div class="hero-fact">' +
+            '<i class="fa-solid ' + META_FACT_ICON[key] + " " + META_FACT_COLOR[key] + '" aria-hidden="true"></i>' +
+            '<div class="hero-fact-text">' +
+              '<span class="hero-fact-label">' + META_FACT_LABEL[key] + '</span>' +
+              '<span class="hero-fact-value">' + escapeHtml(values[key]) + '</span>' +
+            '</div>' +
+          '</div>'
         );
       })
       .join("");
   }
 
-  function renderContact(contact) {
+  function statChip(color, iconClass, iconLibrary, value, label) {
     return (
-      '<div class="quick-contact-card"><span class="value-icon c-blue"><i class="fa-solid fa-envelope" aria-hidden="true"></i></span><h3>Email</h3><p>' +
-      escapeHtml(contact.email) +
-      "</p></div>" +
-      '<div class="quick-contact-card"><span class="value-icon c-whatsapp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></span><h3>WhatsApp</h3><p>' +
-      escapeHtml(contact.whatsapp) +
-      "</p></div>" +
-      '<div class="quick-contact-card"><span class="value-icon c-location"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></span><h3>Location</h3><p>' +
-      escapeHtml(contact.location) +
-      "</p></div>"
+      '<div class="stat-tile ' + color + '">' +
+        '<span class="stat-tile-icon"><i class="' + iconLibrary + " " + iconClass + '" aria-hidden="true"></i></span>' +
+        '<span class="stat-tile-text"><strong>' + escapeHtml(value) + "</strong><span>" + escapeHtml(label) + "</span></span>" +
+      "</div>"
     );
   }
 
-  function renderSocial(social) {
-    return social
-      .map(function (s) {
-        var icon = PLATFORM_ICON[s.platform] || "fa-link";
-        return (
-          '<a href="' + escapeHtml(s.url) + '" target="_blank" rel="noopener" class="creator-social-item p-' + escapeHtml(s.platform) + '">' +
-            '<span class="creator-social-icon"><i class="fa-brands ' + icon + '" aria-hidden="true"></i></span>' +
-            '<span class="creator-social-text"><span class="creator-social-name">' + escapeHtml(s.label) + '</span><span class="creator-social-meta">' + escapeHtml(s.meta) + "</span></span>" +
-            '<i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>' +
-          "</a>"
-        );
-      })
-      .join("");
-  }
-
-  function renderAudience(audience) {
-    return audience
+  function renderAudienceRows(rows) {
+    return (rows || [])
       .map(function (a) {
         return (
-          '<div><div class="audience-item-head"><span>' + escapeHtml(a.label) + "</span><span>" + a.value + '%</span></div>' +
-          '<div class="audience-bar-track"><div class="audience-bar-fill" style="width:' + a.value + '%;"></div></div></div>'
+          '<div class="audience-row"><div class="audience-head"><span>' + escapeHtml(a.label) + "</span><span>" + a.value + '%</span></div>' +
+          '<div class="audience-track"><div class="audience-fill" style="width:' + a.value + '%;"></div></div></div>'
         );
       })
       .join("");
   }
 
-  function renderTestimonial(review) {
-    var initials = review.brand
-      .split(" ")
-      .map(function (w) { return w.charAt(0); })
-      .slice(0, 2)
-      .join("")
-      .toUpperCase();
+  var AUDIENCE_GROUP_LABEL = { gender: "Gender", age: "Age", city: "Cities" };
+
+  // One card per connected platform — own stats, own audience breakdown.
+  // A creator with no connected accounts gets an empty list here, and
+  // render() below never shows the section at all (rather than an empty
+  // "Platform Performance" heading with nothing under it).
+  function renderPlatformCard(p) {
+    var icon = PLATFORM_ICON[p.platform] || "fa-link";
+    var stats =
+      statChip("c-violet", icon, "fa-brands", p.followers, "Followers") +
+      statChip("c-blue", "fa-images", "fa-solid", p.posts, "Posts") +
+      statChip("c-pink", "fa-chart-line", "fa-solid", p.engagementRate, "Engagement Rate") +
+      statChip("c-emerald", "fa-heart", "fa-solid", p.likes30d, "Likes (30d)");
+
+    var audienceCols = ["gender", "age", "city"]
+      .map(function (key) {
+        var rows = p.audience && p.audience[key];
+        if (!rows || !rows.length) return "";
+        return (
+          '<div class="platform-audience-col"><h4>' + AUDIENCE_GROUP_LABEL[key] + "</h4>" +
+          '<div class="audience-grid">' + renderAudienceRows(rows) + "</div></div>"
+        );
+      })
+      .join("");
 
     return (
-      '<div class="testimonial-card theme-' + escapeHtml(review.theme) + '" data-rating="' + Math.floor(review.rating) + '">' +
-        '<div class="testimonial-stars">' + starsHtml(review.rating) + "</div>" +
-        '<p class="testimonial-quote">"' + escapeHtml(review.text) + '"</p>' +
-        '<div class="testimonial-person">' +
-          '<span class="testimonial-avatar">' + escapeHtml(initials) + "</span>" +
-          "<div><h3>" + escapeHtml(review.brand) + "</h3></div>" +
+      '<div class="platform-card p-' + escapeHtml(p.platform) + '">' +
+        '<div class="platform-card-head">' +
+          '<span class="social-icon"><i class="fa-brands ' + icon + '" aria-hidden="true"></i></span>' +
+          "<div><h3>" + escapeHtml(p.label) + "</h3><span>" + escapeHtml(p.handle) + "</span></div>" +
+          '<a href="' + escapeHtml(p.url) + '" target="_blank" rel="noopener" class="btn btn-sm platform-card-link">' +
+            "View Profile" +
+            '<i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>' +
+          "</a>" +
         "</div>" +
+        '<div class="stat-band">' + stats + "</div>" +
+        (audienceCols ? '<div class="platform-audience">' + audienceCols + "</div>" : "") +
       "</div>"
+    );
+  }
+
+  function renderPlatformCards(platforms) {
+    return (platforms || []).map(renderPlatformCard).join("");
+  }
+
+  function renderContact(contact) {
+    var emailRow = contact.email
+      ? '<a class="contact-row" href="mailto:' + escapeHtml(contact.email) + '">'
+      : '<div class="contact-row">';
+    var emailRowClose = contact.email ? "</a>" : "</div>";
+
+    return (
+      emailRow + '<span class="contact-icon c-blue"><i class="fa-solid fa-envelope" aria-hidden="true"></i></span><div><h3>Email</h3><p>' +
+      escapeHtml(contact.email || "N/A") +
+      "</p></div>" + emailRowClose +
+      '<div class="contact-row"><span class="contact-icon c-whatsapp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></span><div><h3>WhatsApp</h3><p>' +
+      escapeHtml(contact.whatsapp || "N/A") +
+      "</p></div></div>" +
+      '<div class="contact-row"><span class="contact-icon c-location"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></span><div><h3>Location</h3><p>' +
+      escapeHtml(contact.location) +
+      "</p></div></div>"
     );
   }
 
@@ -146,39 +199,34 @@
   function render(creator) {
     document.title = creator.name + " — Creator Profile — Find My Influencer";
 
+    var avatarEl = document.querySelector('[data-field="avatar-initials"]');
+    if (avatarEl) {
+      avatarEl.textContent = creator.avatarInitials || "";
+      var avatarWrap = avatarEl.closest("[data-avatar]");
+      if (avatarWrap && creator.avatarTheme) avatarWrap.setAttribute("data-theme", creator.avatarTheme);
+    }
+
     document.querySelector('[data-field="name"]').textContent = creator.name;
-    document.querySelector('[data-field="city"]').textContent = " " + creator.city;
-    document.querySelector('[data-field="handle"]').textContent = creator.handle;
     document.querySelector('[data-field="bio"]').textContent = creator.bio;
-    document.querySelector('[data-field="tags"]').innerHTML = renderTags(creator.categories);
-    var verifiedBadge = document.querySelector('[data-field="verified-badge"]');
-    if (verifiedBadge && !creator.verified) {
-      verifiedBadge.style.display = "none";
+    document.querySelector('[data-field="meta-chips"]').innerHTML = renderMetaChips(creator);
+    var statusBadge = document.querySelector('[data-field="status-badge"]');
+    if (statusBadge) {
+      statusBadge.style.display = creator.status ? "" : "none";
+      var statusText = statusBadge.querySelector('[data-field="status-text"]');
+      if (statusText) statusText.textContent = creator.status || "";
     }
     showSection("profile");
-
-    document.querySelector('[data-field="stats"]').innerHTML = renderStats(creator.stats);
-    showSection("stats");
 
     document.querySelector('[data-field="contact"]').innerHTML = renderContact(creator.contact);
     showSection("contact");
 
-    document.querySelector('[data-field="social"]').innerHTML = renderSocial(creator.social);
-    showSection("social");
-
-    document.querySelector('[data-field="audience"]').innerHTML = renderAudience(creator.audience);
-    showSection("audience");
-
-    // var reviewCountText = creator.reviews.count + (creator.reviews.count === 1 ? " review" : " reviews");
-    // document.querySelector('[data-field="reviews-count"]').textContent = reviewCountText;
-    // document.querySelector('[data-field="modal-count"]').textContent = "(" + reviewCountText + ")";
-    // document.querySelector('[data-field="reviews-preview"]').innerHTML = creator.reviews.items.slice(0, 3).map(renderTestimonial).join("");
-    // document.querySelector('[data-field="reviews-all"]').innerHTML = creator.reviews.items.map(renderTestimonial).join("");
-    // showSection("reviews");
-
-    var firstName = creator.name.split(" ")[0];
-    document.querySelector('[data-field="cta-text"]').textContent =
-      "Send " + firstName + " a campaign invite and she'll typically respond within 24 hours.";
+    // Hidden entirely (not shown with an empty list) when the creator has
+    // no connected accounts — a profile with nothing connected shouldn't
+    // show a "Platform Performance" heading over a blank panel.
+    if (creator.platforms && creator.platforms.length) {
+      document.querySelector('[data-field="platforms"]').innerHTML = renderPlatformCards(creator.platforms);
+      showSection("platforms");
+    }
 
     var copyrightEl = document.querySelector('[data-field="copyright"]');
     if (copyrightEl) {
@@ -197,53 +245,7 @@
     .catch(function (err) {
       console.error(err);
       if (loadingEl) {
-        loadingEl.textContent = "We couldn’t find the creator you’re looking for. Please check the url or search keyword and try again.";
+        loadingEl.textContent = "This creator profile couldn't be loaded right now. Please try again shortly.";
       }
     });
-
-  // ---- Reviews modal (open/close + filter by rating) ----
-  var reviewsBackdrop = document.querySelector("[data-reviews-backdrop]");
-  var reviewsPanel = document.querySelector("[data-reviews-panel]");
-  var reviewsOpenBtn = document.querySelector("[data-reviews-open]");
-  var reviewsCloseBtn = document.querySelector("[data-reviews-close]");
-  var reviewFilters = document.querySelector("[data-review-filters]");
-  var reviewsAllGrid = document.querySelector('[data-field="reviews-all"]');
-  var reviewEmpty = document.querySelector("[data-review-empty]");
-
-  function openReviewsModal() {
-    reviewsBackdrop.classList.add("is-open");
-    reviewsPanel.classList.add("is-open");
-  }
-
-  function closeReviewsModal() {
-    reviewsBackdrop.classList.remove("is-open");
-    reviewsPanel.classList.remove("is-open");
-  }
-
-  if (reviewsOpenBtn) reviewsOpenBtn.addEventListener("click", openReviewsModal);
-  if (reviewsCloseBtn) reviewsCloseBtn.addEventListener("click", closeReviewsModal);
-  if (reviewsBackdrop) reviewsBackdrop.addEventListener("click", closeReviewsModal);
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") closeReviewsModal();
-  });
-
-  if (reviewFilters) {
-    reviewFilters.addEventListener("click", function (e) {
-      var chip = e.target.closest(".review-filter-chip");
-      if (!chip) return;
-      reviewFilters.querySelectorAll(".review-filter-chip").forEach(function (c) {
-        c.classList.remove("is-active");
-      });
-      chip.classList.add("is-active");
-
-      var filter = chip.getAttribute("data-filter");
-      var visibleCount = 0;
-      reviewsAllGrid.querySelectorAll(".testimonial-card").forEach(function (card) {
-        var match = filter === "all" || card.getAttribute("data-rating") === filter;
-        card.style.display = match ? "" : "none";
-        if (match) visibleCount++;
-      });
-      reviewEmpty.style.display = visibleCount === 0 ? "block" : "none";
-    });
-  }
 })();

@@ -1,38 +1,39 @@
 /* ==========================================================================
-   creator-link — public creator profile page
-   Fully self-contained stylesheet: does not link website/css/global.css or
-   website/css/pages.css. Everything this page needs — base tokens/reset,
-   the handful of site components it reuses (header, footer, page-hero,
-   buttons, stat-band, quick-contact-card, testimonial-card, cta) and its
-   own page-specific components — lives in this single file.
+   creator-link v2 — fresh redesign of the public creator profile page.
+   Self-contained: no dependency on css/style.css or website/css/*. Different
+   palette, type scale, radii, shadows and page structure (gradient hero +
+   overlapping avatar, two-column sticky-sidebar body) on purpose — this is
+   a new design, not a restyle of the original.
    ========================================================================== */
 
 :root {
-  --fmi-primary: #3366ff;
-  --fmi-primary-dark: #2551d9;
-  --fmi-primary-light: #eaf0ff;
-  --fmi-heading: #1e2022;
-  --fmi-body: #677788;
-  --fmi-muted: #8c98a4;
-  --fmi-border: #e7eaf3;
-  --fmi-light: #f8fafd;
-  --fmi-white: #ffffff;
-  --fmi-dark-bg: #0b1727;
-  --fmi-warning: #ffb64c;
-  --fmi-success: #00c9a7;
-  --fmi-danger: #ff5a5f;
+  --ink: #14121f;
+  --body: #5c5a72;
+  --muted: #9490a8;
+  --line: #ebe8f5;
+  --surface: #ffffff;
+  --surface-2: #f8f7fc;
+  --white: #ffffff;
 
-  --fmi-font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --fmi-fs-base: 16px;
+  --violet: #7c3aed;
+  --violet-dark: #6425d0;
+  --rose: #ec4899;
+  --amber: #f59e0b;
+  --emerald: #10b981;
 
-  --fmi-container: 1240px;
-  --fmi-radius-sm: 6px;
-  --fmi-radius: 10px;
-  --fmi-radius-lg: 16px;
-  --fmi-shadow-sm: 0 2px 6px rgba(20, 34, 74, 0.06);
-  --fmi-shadow: 0 10px 30px rgba(20, 34, 74, 0.08);
-  --fmi-shadow-lg: 0 20px 50px rgba(20, 34, 74, 0.12);
-  --fmi-header-h: 76px;
+  --gradient-brand: linear-gradient(135deg, #7c3aed 0%, #d6249f 55%, #f97316 100%);
+  --gradient-soft: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(236, 72, 153, 0.1));
+
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  --radius-sm: 12px;
+  --radius: 20px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 2px 10px rgba(20, 18, 31, 0.06);
+  --shadow: 0 14px 30px -10px rgba(124, 58, 237, 0.15);
+  --shadow-lg: 0 22px 46px -14px rgba(124, 58, 237, 0.2);
 }
 
 /* ---- Reset ---- */
@@ -47,68 +48,57 @@ html {
 body {
   margin: 0;
   overflow-x: clip;
-  font-family: var(--fmi-font);
-  font-size: var(--fmi-fs-base);
-  line-height: 1.7;
-  color: var(--fmi-body);
-  background: var(--fmi-white);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--body);
   -webkit-font-smoothing: antialiased;
+  /* Dots + gradient across the whole page, not just the hero banner. */
+  background-color: var(--surface);
+  background-image:
+    radial-gradient(rgba(236, 72, 153, 0.16) 1.6px, transparent 1.7px),
+    radial-gradient(rgba(59, 130, 246, 0.16) 1.6px, transparent 1.7px),
+    radial-gradient(rgba(16, 185, 129, 0.16) 1.6px, transparent 1.7px),
+    radial-gradient(rgba(245, 158, 11, 0.16) 1.6px, transparent 1.7px),
+    radial-gradient(1100px 480px at 82% -20%, rgba(59, 130, 246, 0.16) 0%, rgba(59, 130, 246, 0) 60%);
+  background-position: 0 0, 22px 16px, 46px 4px, 12px 34px, 0 0;
+  background-size: 64px 64px, 64px 64px, 64px 64px, 64px 64px, auto;
+  background-attachment: fixed;
 }
 
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
 ul, ol { margin: 0; padding: 0; list-style: none; }
 
-h1, h2, h3, h4, h5, h6 {
-  margin: 0 0 12px;
-  font-weight: 700;
-  color: var(--fmi-heading);
-  line-height: 1.3;
+h1, h2, h3 {
+  margin: 0;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
-p { margin: 0 0 16px; }
+p { margin: 0; }
 button { font-family: inherit; cursor: pointer; }
-svg { display: block; }
 
-/* ---- Layout helpers ---- */
-.container {
+.wrap {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: var(--fmi-container);
+  max-width: 1240px; /* matches website/css/global.css's --fmi-container */
   margin: 0 auto;
   padding: 0 24px;
 }
 
-.section {
-  position: relative;
-  padding: 60px 0;
-  background-image:
-    radial-gradient(rgba(236, 72, 153, 0.14) 1.6px, transparent 1.7px),
-    radial-gradient(rgba(59, 130, 246, 0.14) 1.6px, transparent 1.7px),
-    radial-gradient(rgba(16, 185, 129, 0.14) 1.6px, transparent 1.7px),
-    radial-gradient(rgba(245, 158, 11, 0.14) 1.6px, transparent 1.7px);
-  background-position: 0 0, 22px 16px, 46px 4px, 12px 34px;
-  background-size: 64px 64px;
-}
-
-.section-divider {
-  position: relative;
-  z-index: 1;
-  height: 1px;
-  width: 100%;
-  background: linear-gradient(90deg, transparent, var(--fmi-border) 30%, var(--fmi-border) 70%, transparent);
-}
-
-.section-header {
-  max-width: 640px;
-  margin: 0 auto 56px;
-  text-align: center;
-}
-
-.section-title {
-  font-size: 36px;
-  margin-bottom: 12px;
+/* ---- Loading state ---- */
+.loading-state {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 16px;
 }
 
 /* ---- Buttons ---- */
@@ -117,102 +107,89 @@ svg { display: block; }
   align-items: center;
   justify-content: center;
   gap: 8px;
+  font-family: inherit;
   font-size: 15px;
-  font-weight: 600;
-  padding: 13px 26px;
-  border-radius: var(--fmi-radius-sm);
+  font-weight: 700;
+  padding: 14px 28px;
+  border-radius: var(--radius-pill);
   border: 1px solid transparent;
-  transition: all 0.2s ease;
   white-space: nowrap;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
 }
 
+.btn-outline {
+  background: var(--white);
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+.btn-outline:hover {
+  border-color: var(--violet);
+  color: var(--violet);
+}
+
+.btn-sm { padding: 10px 20px; font-size: 14px; }
+.btn-block { width: 100%; }
+
+/* Same solid-blue primary as profile/index.html's header button. */
 .btn-primary {
-  background: var(--fmi-primary);
-  color: var(--fmi-white);
+  background: #3366ff;
+  color: var(--white);
   box-shadow: 0 6px 16px rgba(51, 102, 255, 0.28);
 }
 
 .btn-primary:hover {
-  background: var(--fmi-primary-dark);
+  background: #2551d9;
   box-shadow: 0 8px 20px rgba(51, 102, 255, 0.36);
   transform: translateY(-1px);
 }
 
-.btn-outline {
-  background: transparent;
-  color: var(--fmi-heading);
-  border-color: var(--fmi-border);
+/* The header's "Join for Free" matches website/css/global.css's button
+   exactly (weight, padding, a 6px radius instead of this page's usual
+   pill shape) — scoped to .site-header only, so the pill-shaped CTA
+   buttons used elsewhere on this page (e.g. "Invite to Campaign") are
+   unaffected. */
+.site-header .btn {
+  font-weight: 600;
+  border-radius: 6px;
 }
 
-.btn-outline:hover {
-  border-color: var(--fmi-primary);
-  color: var(--fmi-primary);
+.site-header .btn-sm {
+  padding: 9px 18px;
 }
 
-.btn-white {
-  background: var(--fmi-white);
-  color: var(--fmi-primary);
-}
-
-.btn-white:hover {
-  background: var(--fmi-light);
-  transform: translateY(-1px);
-}
-
-.btn-sm { padding: 9px 18px; font-size: 14px; }
-
-/* ---- Header ---- */
+/* ---- Site header (same as profile/index.html's header) ---- */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 900;
-  height: var(--fmi-header-h);
+  height: 76px;
   display: flex;
   align-items: center;
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: saturate(180%) blur(10px);
-  border-bottom: 1px solid var(--fmi-border);
-  transition: box-shadow 0.2s ease;
+  border-bottom: 1px solid var(--line);
 }
 
-.site-header.is-scrolled {
-  box-shadow: 0 4px 20px rgba(20, 34, 74, 0.08);
-}
-
-.site-header .container {
+.header-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 21px;
-  font-weight: 800;
-  color: var(--fmi-heading);
-  flex-shrink: 0;
-}
+.brand img { width: 240px; display: block; } /* matches website/css/global.css's .brand img */
 
-.brand img { width: 240px; }
-
-@media (max-width: 1080px) {
-  .brand img { width: 220px; }
-}
-
-/* ---- Footer ---- */
+/* ---- Site footer (same as profile/index.html's footer) ---- */
 .site-footer {
   position: relative;
-  background-color: var(--fmi-dark-bg);
+  background-color: #0b1727;
   background-image:
     radial-gradient(rgba(255, 255, 255, 0.08) 1.6px, transparent 1.7px),
     radial-gradient(rgba(255, 255, 255, 0.05) 1.6px, transparent 1.7px);
   background-position: 0 0, 24px 18px;
   background-size: 46px 46px, 46px 46px;
   color: #9fb0c3;
-  padding: 0;
 }
 
 .footer-bottom {
@@ -222,581 +199,463 @@ svg { display: block; }
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 16px;
   padding: 20px 0 16px;
   font-size: 14px;
-  flex-wrap: wrap;
 }
 
-/* ---- Page hero (Profile section background) ---- */
-.page-hero {
+/* ---- Hero ---- */
+/* The banner IS the hero section (not a separate fixed-height strip behind
+   it), so its height is just padding + content — it grows or shrinks with
+   whatever's inside (a longer bio, more tags, etc). Dot pattern matches
+   profile/index.html's .page-hero exactly. There's no per-creator cover
+   photo in the API yet; .hero[style*="background-image"] (set inline once
+   that exists) would take over from this pattern automatically. */
+.hero {
   position: relative;
-  overflow: hidden;
-  padding: 64px 0 56px;
-  text-align: center;
-  background-color: var(--fmi-white);
-  background-image:
-    radial-gradient(rgba(236, 72, 153, 0.16) 1.6px, transparent 1.7px),
-    radial-gradient(rgba(59, 130, 246, 0.16) 1.6px, transparent 1.7px),
-    radial-gradient(rgba(16, 185, 129, 0.16) 1.6px, transparent 1.7px),
-    radial-gradient(rgba(245, 158, 11, 0.16) 1.6px, transparent 1.7px),
-    radial-gradient(1100px 480px at 82% -20%, rgba(59, 130, 246, 0.16) 0%, rgba(59, 130, 246, 0) 60%);
-  background-position: 0 0, 22px 16px, 46px 4px, 12px 34px, 0 0;
-  background-size: 64px 64px, 64px 64px, 64px 64px, 64px 64px, auto;
+  padding: 48px 0;
 }
 
-.page-hero::before {
-  content: "";
-  position: absolute;
-  z-index: 0;
-  top: -90px;
-  left: -60px;
-  width: 320px;
-  height: 320px;
-  border-radius: 50%;
-  filter: blur(100px);
-  background: rgba(139, 92, 246, 0.16);
-  pointer-events: none;
-}
-
-.page-hero .container {
-  position: relative;
-  z-index: 1;
-  max-width: 720px;
-}
-
-@media (max-width: 640px) {
-  .page-hero { padding: 44px 0 40px; }
-}
-
-/* ---- Stat band ---- */
-.stat-band {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  text-align: center;
-}
-
-.stat-band-item {
-  padding: 28px 16px;
-  border: 1px solid var(--fmi-border);
-  border-radius: var(--fmi-radius-lg);
-  background: var(--fmi-white);
-}
-
-.stat-band-item strong {
-  display: block;
-  font-size: 32px;
-  font-weight: 800;
-  color: var(--fmi-heading);
-  margin-bottom: 6px;
-}
-
-.stat-band-item span {
-  font-size: 14px;
-  color: var(--fmi-muted);
-}
-
-@media (max-width: 991px) {
-  .stat-band { grid-template-columns: repeat(2, 1fr); }
-}
-
-/* ---- Quick contact cards ---- */
-.quick-contact-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-
-.quick-contact-card {
-  text-align: center;
-  padding: 28px 20px;
-  border: 1px solid var(--fmi-border);
-  border-radius: var(--fmi-radius-lg);
-  background: var(--fmi-white);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.quick-contact-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--fmi-shadow);
-}
-
-.quick-contact-card h3 {
-  font-size: 16px;
-  margin-bottom: 6px;
-}
-
-.quick-contact-card p {
-  font-size: 15px;
-  color: var(--fmi-body);
-  margin-bottom: 0;
-}
-
-@media (max-width: 991px) {
-  .quick-contact-grid { grid-template-columns: 1fr; }
-}
-
-/* ---- Value / contact icon badge ---- */
-.value-icon {
-  width: 56px;
-  height: 56px;
+.hero-content {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--fmi-radius);
-  font-size: 22px;
-  margin: 0 auto 16px;
+  align-items: flex-start;
+  gap: 28px;
 }
 
-.value-icon.c-blue { color: #3b82f6; background: #dce8ff; }
-
-/* ---- Testimonial cards ---- */
-.testimonial-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  align-items: start;
-}
-
-.testimonial-card {
-  position: relative;
-  padding: 28px;
-  border: 1px solid var(--fmi-border);
-  border-radius: var(--fmi-radius-lg);
-  background: var(--fmi-white);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.testimonial-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--fmi-shadow-lg);
-}
-
-.testimonial-stars {
-  color: var(--fmi-warning);
-  font-size: 14px;
-  margin-bottom: 14px;
-}
-
-.testimonial-quote {
-  font-size: 15px;
-  color: var(--fmi-heading);
-  margin-bottom: 20px;
-}
-
-.testimonial-person {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding-top: 18px;
-  border-top: 1px solid var(--fmi-border);
-}
-
-.testimonial-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--fmi-white);
+.avatar-ring {
   flex-shrink: 0;
-}
-
-.testimonial-person h3 { font-size: 15px; margin-bottom: 0; }
-
-.theme-pink .testimonial-avatar { background: #ff5c8a; }
-.theme-peach .testimonial-avatar { background: #ff9a3c; }
-.theme-blue .testimonial-avatar { background: #3b82f6; }
-.theme-purple .testimonial-avatar { background: #8b5cf6; }
-
-@media (max-width: 991px) {
-  .testimonial-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 640px) {
-  .testimonial-grid { grid-template-columns: 1fr; }
-}
-
-/* ---- CTA banner ---- */
-.cta {
-  position: relative;
-  overflow: hidden;
-  background-image:
-    radial-gradient(rgba(255, 255, 255, 0.18) 1.6px, transparent 1.7px),
-    radial-gradient(rgba(255, 255, 255, 0.1) 1.6px, transparent 1.7px),
-    linear-gradient(120deg, #2b52d6 0%, var(--fmi-primary) 55%, #6a8bff 100%);
-  background-position: 0 0, 24px 18px, 0 0;
-  background-size: 46px 46px, 46px 46px, auto;
-  border-radius: var(--fmi-radius-lg);
-  padding: 72px 48px;
-  text-align: center;
-  color: var(--fmi-white);
-  margin-bottom: 60px;
-}
-
-.cta::before, .cta::after {
-  content: "";
-  position: absolute;
+  width: 128px;
+  height: 128px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--white);
+  padding: 5px;
+  box-shadow: var(--shadow-lg);
 }
 
-.cta::before { width: 320px; height: 320px; top: -160px; left: -80px; }
-.cta::after { width: 260px; height: 260px; bottom: -140px; right: -60px; }
-
-.cta-inner {
-  position: relative;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.cta h2 { color: var(--fmi-white); font-size: 34px; margin-bottom: 14px; }
-.cta p { font-size: 17px; color: rgba(255, 255, 255, 0.88); margin-bottom: 32px; }
-
-.cta-actions {
-  display: flex;
-  justify-content: center;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 640px) {
-  .section { padding: 60px 0; }
-  .cta { padding: 48px 24px; }
-  .cta h2 { font-size: 26px; }
-}
-
-/* ==========================================================================
-   Page-specific components (profile identity, tags, social pills, audience
-   bars, reviews row + filter modal) — not part of the site's shared kit.
-   ========================================================================== */
-
-/* ---- Profile identity (inside .page-hero) ---- */
-.creator-verified-badge {
-  display: inline-flex;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--fmi-primary-light);
-  color: var(--fmi-primary);
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-}
-
-.creator-name {
+.avatar-circle {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-}
-
-.creator-meta {
-  font-size: 15px;
-  color: var(--fmi-muted);
-  margin-bottom: 18px;
-}
-
-.creator-meta i {
-  color: var(--fmi-primary);
-  margin-right: 4px;
-}
-
-.creator-tags {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 28px;
-}
-
-.creator-tag {
-  padding: 6px 14px;
-  border-radius: 100px;
-  font-size: 12.5px;
-  font-weight: 700;
-}
-
-.creator-tag.c-pink { color: #ec4899; background: #ffe3ef; }
-.creator-tag.c-blue { color: #3b82f6; background: #dce8ff; }
-.creator-tag.c-emerald { color: #10b981; background: #d7f8ec; }
-.creator-tag.c-violet { color: #8b5cf6; background: #ece4ff; }
-.creator-tag.c-amber { color: #f59e0b; background: #fff2d6; }
-
-/* ---- Stat band light color variants ---- */
-.stat-band-item.c-violet { background: linear-gradient(135deg, #f3eefe 0%, #fbf8ff 100%); border-color: #e7e0fb; }
-.stat-band-item.c-pink { background: linear-gradient(135deg, #ffeef5 0%, #fff8fb 100%); border-color: #f9dee7; }
-.stat-band-item.c-blue { background: linear-gradient(135deg, #eaf1ff 0%, #f6faff 100%); border-color: #dceafd; }
-.stat-band-item.c-emerald { background: linear-gradient(135deg, #eafbf5 0%, #f6fffb 100%); border-color: #dceee5; }
-
-/* ---- Contact icon color variants (email/whatsapp/location "true" colors) ---- */
-.value-icon.c-whatsapp { color: #25d366; background: #e3f9ec; }
-.value-icon.c-location { color: #ea4335; background: #fdeceb; }
-
-/* ---- Social link pills (icons only appear here) ---- */
-.creator-social-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 14px;
-}
-
-.creator-social-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 18px;
-  border-radius: 100px;
-  text-decoration: none;
-  flex: 1 1 260px;
-  max-width: 320px;
-  color: var(--fmi-white);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.creator-social-item:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--fmi-shadow);
-}
-
-.creator-social-item.p-instagram { background: linear-gradient(135deg, #f58529, #dd2a7b 55%, #8134af); }
-.creator-social-item.p-youtube { background: #ff0000; }
-.creator-social-item.p-facebook { background: #1877f2; }
-.creator-social-item.p-linkedin { background: #0a66c2; }
-
-.creator-social-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.22);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-
-.creator-social-text {
-  flex: 1;
-  min-width: 0;
-  text-align: left;
-}
-
-.creator-social-name {
-  display: block;
-  font-size: 14.5px;
-  font-weight: 700;
-}
-
-.creator-social-meta {
-  display: block;
-  font-size: 12.5px;
-  color: rgba(255, 255, 255, 0.85);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* ---- Audience insights bars ---- */
-.audience-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 28px 40px;
-  max-width: 640px;
-  margin: 0 auto;
-}
-
-.audience-item-head {
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-  margin-bottom: 8px;
-}
-
-.audience-item-head span:first-child { color: var(--fmi-body); font-weight: 600; }
-.audience-item-head span:last-child { color: var(--fmi-heading); font-weight: 700; }
-
-.audience-bar-track {
-  height: 8px;
-  border-radius: 100px;
-  background: var(--fmi-border);
-  overflow: hidden;
-}
-
-.audience-bar-fill {
+  width: 100%;
   height: 100%;
-  border-radius: 100px;
-  background: var(--fmi-primary);
+  border-radius: 50%;
+  background: var(--gradient-brand);
+  color: var(--white);
+  font-size: 40px;
+  font-weight: 800;
 }
 
-@media (max-width: 640px) {
-  .audience-grid { grid-template-columns: 1fr; }
-}
+/* Same 10-name palette as website/css/pages.css's .theme-* card colors
+   (website/js/main.js's INFLUENCER_THEMES) — computed per profile id
+   (api/influencer-detail.php), not read from a stored column. */
+.avatar-ring[data-theme="pink"] .avatar-circle { background: linear-gradient(135deg, #fb7185, #ec4899); }
+.avatar-ring[data-theme="peach"] .avatar-circle { background: linear-gradient(135deg, #fb923c, #f59e0b); }
+.avatar-ring[data-theme="blue"] .avatar-circle { background: linear-gradient(135deg, #38bdf8, #6366f1); }
+.avatar-ring[data-theme="purple"] .avatar-circle { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
+.avatar-ring[data-theme="green"] .avatar-circle { background: linear-gradient(135deg, #4ade80, #16a34a); }
+.avatar-ring[data-theme="teal"] .avatar-circle { background: linear-gradient(135deg, #2dd4bf, #0d9488); }
+.avatar-ring[data-theme="coral"] .avatar-circle { background: linear-gradient(135deg, #f87171, #dc2626); }
+.avatar-ring[data-theme="indigo"] .avatar-circle { background: linear-gradient(135deg, #818cf8, #4f46e5); }
+.avatar-ring[data-theme="amber"] .avatar-circle { background: linear-gradient(135deg, #fbbf24, #d97706); }
+.avatar-ring[data-theme="cyan"] .avatar-circle { background: linear-gradient(135deg, #22d3ee, #0891b2); }
 
-/* ---- Reviews header row + "see all" trigger ---- */
-[data-creator-section="reviews"] .section-header {
-    margin-bottom: 10px;
-}
-.reviews-head-row {
+.hero-text { flex: 1; min-width: 0; padding-top: 12px; }
+
+.hero-name-row {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px; /* was tighter when a handle line sat right below */
+}
+
+.hero-name-row h1 { font-size: 32px; }
+
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px 5px 10px;
+  border-radius: var(--radius-pill);
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--emerald);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.hero-bio {
+  max-width: 620px;
+  font-size: 16px;
+  color: var(--body);
+  margin-bottom: 18px;
+  line-height: 1.4;
+}
+
+/* Hero "quick facts" strip (category/budget/language/gender/age) — every
+   icon sits in a fixed-size circular badge, so a visually heavier glyph
+   can never look mis-sized or mis-aligned next to the others the way a
+   plain inline icon did before. No divider above it now — it reads as
+   part of the same block as the bio, not a separate section. */
+.hero-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 40px;
+  margin-top: 16px;
+}
+
+.hero-fact {
+  display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 40px;
 }
 
-.reviews-count {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--fmi-heading);
+.hero-fact i {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  border-radius: 50%;
 }
 
-/* ---- Reviews modal (filter by rating) ---- */
-.review-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(11, 23, 39, 0.55);
-  z-index: 1300;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s ease, visibility 0.2s;
-}
+/* 5-color set, one per fact, so each reads as a distinct accent instead of
+   every icon sharing one uniform violet. */
+.hero-fact i.c-amber { background: rgba(245, 158, 11, 0.12); color: #b45309; }
+.hero-fact i.c-emerald { background: rgba(16, 185, 129, 0.1); color: var(--emerald); }
+.hero-fact i.c-blue { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+.hero-fact i.c-pink { background: rgba(236, 72, 153, 0.1); color: var(--rose); }
+.hero-fact i.c-violet { background: rgba(124, 58, 237, 0.1); color: var(--violet); }
 
-.review-modal-backdrop.is-open {
-  opacity: 1;
-  visibility: visible;
-}
-
-.review-modal-panel {
-  position: fixed;
-  inset: 40px;
-  max-width: 760px;
-  margin: 0 auto;
-  background: var(--fmi-white);
-  border-radius: var(--fmi-radius-lg);
-  box-shadow: var(--fmi-shadow-lg);
-  z-index: 1301;
+.hero-fact-text {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  opacity: 0;
-  visibility: hidden;
-  transform: scale(0.98);
-  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.2s;
+  line-height: 1.3;
 }
 
-.review-modal-panel.is-open {
-  opacity: 1;
-  visibility: visible;
-  transform: scale(1);
+.hero-fact-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
 }
 
-.review-modal-header {
+.hero-fact-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* ---- Body grid ---- */
+/* Simple full-width stack — contact, then platform analytics — not a
+   sidebar grid anymore, so nothing here is sticky. */
+.profile-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 0 0 72px;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+}
+
+.panel-head { margin-bottom: 22px; }
+
+.eyebrow {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--violet);
+  margin-bottom: 6px;
+}
+
+.panel-head h2 { font-size: 22px; }
+
+/* ---- Stat band ---- */
+/* Horizontal wrapping pill/chip row — icon beside the number, not above it.
+   A different composition from a grid of boxed cards on purpose. */
+.stat-band {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.stat-tile {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 22px 26px;
-  border-bottom: 1px solid var(--fmi-border);
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  padding: 12px 20px 12px 12px;
+  /* Equal width regardless of content — "Posts" (e.g. "62") is much
+     shorter than "Followers" (e.g. "326.1K"), which made that tile
+     visibly narrower than the other three. */
+  flex: 1 1 170px;
+  min-width: 170px;
+}
+
+.stat-tile-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-tile strong {
+  display: block;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+/* Scoped to .stat-tile-text specifically, not .stat-tile — .stat-tile-icon
+   is also a direct-child <span> of .stat-tile, and the broader selector
+   used to match it too (with HIGHER specificity than .stat-tile-icon's own
+   class rule), overriding its centering display:inline-flex to block and
+   shrinking its font-size, which squashed the icon toward one side of its
+   circle instead of centering it. */
+.stat-tile-text span {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* Light tinted backgrounds, same treatment as the main version's
+   .stat-band-item.c-* variants — no solid/vivid fills. */
+.stat-tile.c-violet { background: linear-gradient(135deg, #f3eefe 0%, #fbf8ff 100%); border-color: #e7e0fb; }
+.stat-tile.c-pink { background: linear-gradient(135deg, #ffeef5 0%, #fff8fb 100%); border-color: #f9dee7; }
+.stat-tile.c-blue { background: linear-gradient(135deg, #eaf1ff 0%, #f6faff 100%); border-color: #dceafd; }
+.stat-tile.c-emerald { background: linear-gradient(135deg, #eafbf5 0%, #f6fffb 100%); border-color: #dceee5; }
+
+.stat-tile-icon {
   flex-shrink: 0;
-}
-
-.review-modal-header h2 {
-  margin: 0;
-  font-size: 19px;
-}
-
-.review-modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: none;
-  background: var(--fmi-light);
-  color: var(--fmi-body);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.review-modal-close:hover {
-  background: var(--fmi-border);
-}
-
-.review-modal-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 26px;
-}
-
-.review-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 22px;
-}
-
-.review-filter-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 7px 15px;
-  border-radius: 100px;
-  border: 1px solid var(--fmi-border);
-  background: var(--fmi-white);
-  color: var(--fmi-body);
-  font-size: 12.5px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-}
-
-.review-filter-chip:hover {
-  border-color: var(--fmi-primary);
-}
-
-.review-filter-chip.is-active {
-  background: var(--fmi-primary);
-  border-color: var(--fmi-primary);
-  color: var(--fmi-white);
-}
-
-.review-modal-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-
-@media (max-width: 640px) {
-  .review-modal-panel { inset: 16px; }
-  .review-modal-header, .review-modal-body { padding: 18px; }
-  .review-modal-grid { grid-template-columns: 1fr; }
-}
-@media (max-width: 450px) {
-  .brand img{
-    width: 190px;
-  }
-  .header-actions>a {
-    padding: 6px 10px;
-  }
-}
-.review-modal-empty {
-  display: none;
-  text-align: center;
-  padding: 30px 16px;
-  color: var(--fmi-muted);
+  background: rgba(255, 255, 255, 0.8);
   font-size: 14px;
 }
 
-/* ---- Loading skeleton ---- */
-.creator-loading {
+.stat-tile.c-violet .stat-tile-icon { color: var(--violet); }
+.stat-tile.c-pink .stat-tile-icon { color: var(--rose); }
+.stat-tile.c-blue .stat-tile-icon { color: #3b82f6; }
+.stat-tile.c-emerald .stat-tile-icon { color: var(--emerald); }
+
+/* ---- Audience bars ---- */
+.audience-grid { display: flex; flex-direction: column; gap: 18px; }
+
+.audience-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.audience-track {
+  height: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--line);
+  overflow: hidden;
+}
+
+/* This page's own violet -> rose brand colors (same as --violet/--rose
+   used for the primary button, status badge, etc.) — the old purple/pink/
+   orange pastel gradient here was leftover from an earlier design and
+   didn't match the rest of the page's actual palette. */
+.audience-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--violet) 0%, var(--rose) 100%);
+}
+
+/* ---- Per-platform analytics cards ---- */
+/* One of these per connected account — own stat-band, own gender/age/city
+   audience columns. Reuses .stat-band/.stat-tile and .audience-grid/
+   .audience-row as-is (same components the old single combined panel
+   used), just repeated once per platform instead of shown once overall. */
+.platform-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.platform-card {
+  /* Light neutral panel (not platform-branded — that was tried and
+     reverted) so each card reads as a section against the page's own
+     gradient background instead of blending into plain white. */
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+}
+
+.platform-card-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.platform-card-head h3 { font-size: 17px; }
+/* Scoped to the handle text specifically — .social-icon is also a <span>
+   directly inside .platform-card-head, and this rule used to match it too,
+   shrinking the (inherited) icon font from 18px down to 13px and making it
+   look squashed toward the top of its circle instead of centered. */
+.platform-card-head h3 + span { font-size: 13px; color: var(--muted); }
+
+/* The "visit this platform" link — pushed to the far right of the head
+   row, replacing the old standalone "Where to Find Them" card grid. Filled
+   with that platform's own brand color (same values as .social-icon)
+   instead of the plain outline button used everywhere else, so it reads
+   as "go to Instagram/YouTube/etc" rather than a generic action. */
+.platform-card-link {
+  margin-left: auto;
+  flex-shrink: 0;
+  border: none;
+  color: var(--white);
+}
+
+.platform-card-link:hover { color: var(--white); }
+
+.p-instagram .platform-card-link { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); }
+.p-youtube .platform-card-link { background: #ff0000; }
+.p-facebook .platform-card-link { background: #1877f2; }
+.p-linkedin .platform-card-link { background: #0a66c2; }
+.p-snapchat .platform-card-link { background: #fffc00; color: var(--ink); }
+.p-snapchat .platform-card-link:hover { color: var(--ink); }
+.p-twitter .platform-card-link { background: #1da1f2; }
+.p-pinterest .platform-card-link { background: #e60023; }
+
+.platform-card .stat-band { margin-bottom: 24px; }
+
+.platform-audience {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.platform-audience-col h4 {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.platform-audience-col .audience-grid { gap: 12px; }
+
+/* .social-icon + .p-{platform} are reused by .platform-card-head — the
+   "Where to Find Them" grid these were originally built for is gone, but
+   these two are still live. */
+.social-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--white);
+  font-size: 18px;
+}
+
+.p-instagram .social-icon { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); }
+.p-youtube .social-icon { background: #ff0000; }
+.p-facebook .social-icon { background: #1877f2; }
+.p-linkedin .social-icon { background: #0a66c2; }
+.p-snapchat .social-icon { background: #fffc00; color: var(--ink); }
+.p-twitter .social-icon { background: #1da1f2; }
+.p-pinterest .social-icon { background: #e60023; }
+
+.social-text { flex: 1; min-width: 0; }
+/* ---- Contact list ---- */
+/* Row, not a column — Contact Details is full-width now, not a narrow
+   sidebar, so Email/WhatsApp/Location sit side by side. */
+.contact-list { display: flex; flex-wrap: wrap; gap: 22px; }
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1 1 240px;
+  min-width: 0;
+}
+
+.contact-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-size: 17px;
+}
+
+/* Light tinted backgrounds with a "true"-colored icon, same treatment as
+   the main version's .value-icon.c-* variants. */
+.contact-icon.c-blue { color: #3b82f6; background: #dce8ff; }
+.contact-icon.c-whatsapp { color: #25d366; background: #e3f9ec; }
+.contact-icon.c-location { color: #ea4335; background: #fdeceb; }
+
+.contact-row h3 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 4px; }
+.contact-row p { font-size: 14px; font-weight: 600; color: var(--ink); word-break: break-word; }
+
+a.contact-row { border-radius: var(--radius-sm); margin: -6px; padding: 6px; transition: background 0.15s ease; }
+a.contact-row:hover { background: var(--surface-2); }
+a.contact-row:hover p { color: var(--violet-dark); }
+
+/* ---- Footer ---- */
+.site-footer {
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
   text-align: center;
-  padding: 120px 20px;
-  color: var(--fmi-muted);
-  font-size: 15px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  .platform-audience { grid-template-columns: 1fr; gap: 20px; }
+}
+
+@media (max-width: 640px) {
+  .hero { padding: 32px 0; }
+
+  .hero-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .avatar-ring { width: 96px; height: 96px; }
+  .avatar-circle { font-size: 30px; }
+  .hero-text { padding-top: 0; }
+  .hero-name-row h1 { font-size: 26px; }
+
+  .panel { padding: 24px 20px; }
+  .platform-card { padding: 24px 20px; }
+  .stat-tile { flex: 1 1 calc(50% - 6px); }
+
+  .brand img { width: 190px; }
+  .btn-sm { padding: 8px 16px; }
 }

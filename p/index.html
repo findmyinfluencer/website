@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Creator Profile — Find My Influencer</title>
-  <meta name="description" content="Public creator profile on Find My Influencer — social reach, audience insights, reviews and contact details.">
+  <meta name="description" content="Public creator profile on Find My Influencer — social reach, audience insights and contact details.">
   <meta name="robots" content="noindex, follow">
 
   <!-- Pretty URLs like .../p/<slug>/ add a path segment, so relative asset
@@ -36,17 +36,16 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer">
 </head>
 <body>
   <header class="site-header">
-    <div class="container">
+    <div class="wrap header-inner">
       <a href="../index.html" class="brand" aria-label="findmyinfluencer home">
         <img alt="findmyinfluencer logo">
         <script>document.currentScript.previousElementSibling.src = window.__fmiBase + "../images/logo-dark.png";</script>
       </a>
-
       <div class="header-actions">
         <a href="../signup.html" class="btn btn-primary btn-sm">Join for Free</a>
       </div>
@@ -56,127 +55,60 @@
   <main id="main-content" data-creator-source="data/aditi-kapoor.json">
 
     <!-- Loading state: replaced once the API response renders -->
-    <div class="creator-loading" data-creator-loading>Loading creator profile…</div>
+    <div class="loading-state" data-creator-loading>Loading creator profile…</div>
 
-    <!-- Profile -->
-    <section class="page-hero" data-creator-section="profile" style="display: none;">
-      <div class="container">
-        <h1 class="creator-name"><span data-field="name"></span></h1>
-        <p class="creator-meta"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span data-field="city"></span> · <span data-field="handle"></span></p>
-        <p class="creator-bio" data-field="bio"></p>
-        <div class="creator-tags" data-field="tags"></div>
-        <a href="#" class="btn btn-primary"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Invite to Campaign</a>
-      </div>
-    </section>
-
-
-    <!-- Stats -->
-    <section class="section" data-creator-section="stats" style="display: none;">
-      <div class="container">
-        <div class="stat-band" data-field="stats"></div>
-      </div>
-    </section>
-
-
-    <!-- Contact details -->
-    <section class="section" data-creator-section="contact" style="display: none;">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">Contact Details</h2>
+    <!-- Hero: dotted banner sized to its content -->
+    <section class="hero" data-creator-section="profile" style="display: none;">
+      <div class="wrap hero-content">
+        <div class="avatar-ring" data-avatar>
+          <span class="avatar-circle" data-field="avatar-initials"></span>
         </div>
-        <div class="quick-contact-grid" data-field="contact"></div>
-      </div>
-    </section>
 
-
-    <!-- Social links -->
-    <section class="section" data-creator-section="social" style="display: none;">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">Where to Find Her</h2>
-        </div>
-        <div class="creator-social-list" data-field="social"></div>
-      </div>
-    </section>
-
-
-    <!-- Audience insights -->
-    <section class="section" data-creator-section="audience" style="display: none;">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">Audience Insights</h2>
-        </div>
-        <div class="audience-grid" data-field="audience"></div>
-      </div>
-    </section>
-
-
-    <!-- Reviews & Ratings -->
-    <!-- <section class="section" data-creator-section="reviews" style="display: none;">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">Reviews &amp; Ratings</h2>
-        </div>
-        <div class="reviews-head-row">
-          <span class="reviews-count" data-field="reviews-count"></span>
-          <button type="button" class="btn btn-outline btn-sm" data-reviews-open>See all reviews</button>
-        </div>
-        <div class="testimonial-grid" data-field="reviews-preview"></div>
-      </div>
-    </section> -->
-
-    <!-- CTA -->
-    <section class="section">
-      <div class="container">
-        <div class="cta">
-          <div class="cta-inner">
-            <h2>Ready to Collaborate?</h2>
-            <p data-field="cta-text"></p>
-            <div class="cta-actions">
-              <a href="#" class="btn btn-white"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Invite to Your Campaign</a>
-            </div>
+        <div class="hero-text">
+          <div class="hero-name-row">
+            <h1 data-field="name"></h1>
+            <span class="verified-badge" data-field="status-badge"><i class="fa-solid fa-award" aria-hidden="true"></i> <span data-field="status-text"></span></span>
           </div>
+          <p class="hero-bio" data-field="bio"></p>
+          <div class="hero-facts" data-field="meta-chips"></div>
         </div>
       </div>
     </section>
+
+    <div class="wrap">
+      <div class="profile-stack">
+        <aside class="panel" data-creator-section="contact" style="display: none;">
+          <div class="panel-head">
+            <span class="eyebrow">Reach Out</span>
+            <h2>Contact Details</h2>
+          </div>
+          <div class="contact-list" data-field="contact"></div>
+        </aside>
+
+        <section class="platform-section" data-creator-section="platforms" style="display: none;">
+          <div class="platform-cards" data-field="platforms"></div>
+        </section>
+      </div>
+    </div>
 
   </main>
 
   <footer class="site-footer">
-    <div class="container">
-      <div class="footer-bottom">
-        <span data-field="copyright">© 2026 findmyinfluencer. All rights reserved.</span>
-      </div>
+    <div class="wrap footer-bottom">
+      <span data-field="copyright">© 2026 findmyinfluencer. All rights reserved.</span>
     </div>
   </footer>
 
-  <div class="review-modal-backdrop" data-reviews-backdrop></div>
-  <div class="review-modal-panel" data-reviews-panel>
-    <div class="review-modal-header">
-      <h2>All Reviews <span style="color:var(--fmi-muted);font-weight:600;font-size:14px;" data-field="modal-count"></span></h2>
-      <button type="button" class="review-modal-close" data-reviews-close aria-label="Close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
-    </div>
-    <div class="review-modal-body">
-      <div class="review-filters" data-review-filters>
-        <button type="button" class="review-filter-chip is-active" data-filter="all">All</button>
-        <button type="button" class="review-filter-chip" data-filter="5">5 <i class="fa-solid fa-star" aria-hidden="true"></i></button>
-        <button type="button" class="review-filter-chip" data-filter="4">4 <i class="fa-solid fa-star" aria-hidden="true"></i></button>
-        <button type="button" class="review-filter-chip" data-filter="3">3 <i class="fa-solid fa-star" aria-hidden="true"></i></button>
-      </div>
-      <div class="review-modal-grid" data-field="reviews-all"></div>
-      <div class="review-modal-empty" data-review-empty>No reviews match this filter yet.</div>
-    </div>
-  </div>
-
   <script>
     (function () {
-      function load(src, cb) {
-        var s = document.createElement('script');
-        s.src = window.__fmiBase + src;
-        if (cb) s.onload = cb;
-        document.head.appendChild(s);
-      }
-      load('../js/main.js', function () { load('js/app.js'); });
+      // p/ serves only its own script and style — no dependency on
+      // website/js/main.js or website/css. Built dynamically, not a static
+      // <script src>, for the same preload-scanner reason given in <head>
+      // for the favicon/stylesheet/logo: a static relative src here would
+      // be speculatively fetched before window.__fmiBase is known.
+      var script = document.createElement('script');
+      script.src = window.__fmiBase + 'js/app.js';
+      document.head.appendChild(script);
     })();
   </script>
 </body>

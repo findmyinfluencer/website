@@ -95,7 +95,7 @@
 
           <div class="hero-stats">
             <div>
-              <div class="stat-num" data-counter="5K+">5K+</div>
+              <div class="stat-num" data-counter="10K+">10K+</div>
               <div class="stat-label">Verified Creators</div>
             </div>
             <div>
@@ -103,7 +103,7 @@
               <div class="stat-label">Brands Onboarded</div>
             </div>
             <div>
-              <div class="stat-num" data-counter="18">18</div>
+              <div class="stat-num" data-counter="32">32</div>
               <div class="stat-label">Niches Covered</div>
             </div>
           </div>
@@ -259,7 +259,7 @@
           <p class="section-desc">Top performing creators actively looking for brand partnerships.</p>
         </div>
 
-        <div class="influencer-grid">
+        <div class="influencer-grid" id="featuredInfluencerGrid">
         </div>
 
         <div class="niche-more">
@@ -362,161 +362,5 @@
   </footer>
 
   <script src="js/main.js"></script>
-  <script>
-    (function () {
-      "use strict";
-
-      var escapeHtml = window.FMI.escapeHtml;
-      var renderFromJson = window.FMI.renderFromJson;
-
-      // Hero profile card: animate the likes/comments/share icons so the
-      // card reads as "live" instead of static.
-      (function animateHeroEngagement() {
-        var likeAction = document.getElementById("heroLikeAction");
-        var commentAction = document.getElementById("heroCommentAction");
-        var shareAction = document.getElementById("heroShareAction");
-        if (!likeAction || !commentAction || !shareAction) return;
-
-        var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-        var likeCountEl = document.getElementById("heroLikeCount");
-        var likeDeltaEl = document.getElementById("heroLikeDelta");
-        var commentCountEl = document.getElementById("heroCommentCount");
-        var commentDeltaEl = document.getElementById("heroCommentDelta");
-
-        var likeRaw = 48200;
-        var commentRaw = 1300;
-
-        function formatK(n) {
-          return (n / 1000).toFixed(1) + "K";
-        }
-
-        function bumpCount(actionEl, countEl, deltaEl, raw, min, max) {
-          var delta = Math.floor(Math.random() * (max - min + 1)) + min;
-          raw += delta;
-          countEl.textContent = formatK(raw);
-
-          if (!reduceMotion) {
-            deltaEl.textContent = "+" + delta;
-            deltaEl.classList.remove("is-floating");
-            void deltaEl.offsetWidth;
-            deltaEl.classList.add("is-floating");
-
-            countEl.classList.remove("is-bumping");
-            void countEl.offsetWidth;
-            countEl.classList.add("is-bumping");
-
-            actionEl.classList.remove("is-bumping");
-            void actionEl.offsetWidth;
-            actionEl.classList.add("is-bumping");
-          }
-
-          return raw;
-        }
-
-        function pulseIcon(actionEl) {
-          if (reduceMotion) return;
-          actionEl.classList.remove("is-bumping");
-          void actionEl.offsetWidth;
-          actionEl.classList.add("is-bumping");
-        }
-
-        function scheduleLikes() {
-          likeRaw = bumpCount(likeAction, likeCountEl, likeDeltaEl, likeRaw, 3, 27);
-          setTimeout(scheduleLikes, 2600 + Math.random() * 1800);
-        }
-
-        function scheduleComments() {
-          commentRaw = bumpCount(commentAction, commentCountEl, commentDeltaEl, commentRaw, 1, 4);
-          setTimeout(scheduleComments, 5200 + Math.random() * 3200);
-        }
-
-        function scheduleShare() {
-          pulseIcon(shareAction);
-          setTimeout(scheduleShare, 9000 + Math.random() * 4000);
-        }
-
-        setTimeout(scheduleLikes, 1400);
-        setTimeout(scheduleComments, 3000);
-        setTimeout(scheduleShare, 5000);
-      })();
-
-      // Featured influencers: top creators by followers, straight from the
-      // live API (not data/influencers.json — that file's gone, the
-      // database is the source of truth now, same as find-influencer.html).
-      // The API lists one row per account, so a creator with both Instagram
-      // and YouTube can appear twice in the raw results — dedupe by slug
-      // before taking the top 4 so this small showcase never repeats a name.
-      (function renderFeaturedInfluencers() {
-        var grid = document.querySelector(".influencer-grid");
-        if (!grid) return;
-
-        fetch("https://api.findmyinfluencer.com/influencers.php?page=1")
-          .then(function (res) {
-            if (!res.ok) throw new Error("Failed to load featured influencers");
-            return res.json();
-          })
-          .then(function (data) {
-            var seen = {};
-            var featured = [];
-            (data.results || []).forEach(function (inf) {
-              if (featured.length >= 4 || seen[inf.slug]) return;
-              seen[inf.slug] = true;
-              featured.push(inf);
-            });
-
-            grid.innerHTML = featured.map(function (inf) {
-              return (
-                '<a class="influencer-card ' + escapeHtml(inf.theme) + '" href="' + escapeHtml(inf.slug) + '/" target="_blank" rel="noopener">' +
-                  '<div class="influencer-cover"><span class="influencer-badge">' + escapeHtml(inf.badge) + "</span></div>" +
-                  '<div class="influencer-avatar">' + escapeHtml(inf.avatarInitials) + "</div>" +
-                  '<div class="influencer-body">' +
-                    "<h3>" + escapeHtml(inf.name) + "</h3>" +
-                    '<p class="influencer-handle">' + escapeHtml(inf.handle) + "</p>" +
-                    '<span class="influencer-pill">' + escapeHtml(inf.category) + "</span>" +
-                    '<div class="influencer-reach"><i class="fa-brands fa-' + escapeHtml(inf.platform) + '" aria-hidden="true"></i><strong>' + escapeHtml(inf.followers) + "</strong><span class=\"visually-hidden\">" + escapeHtml(inf.platform) + " followers</span></div>" +
-                    '<div class="influencer-stats-row">' +
-                      "<div><strong>" + escapeHtml(inf.language) + '</strong><span><i class="fa-solid fa-spell-check" aria-hidden="true"></i><span class="visually-hidden">Language</span></span></div>' +
-                      "<div><strong>" + escapeHtml(inf.city) + '</strong><span><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span class="visually-hidden">City</span></span></div>' +
-                    "</div>" +
-                  "</div>" +
-                "</a>"
-              );
-            }).join("");
-          })
-          .catch(function (err) { console.error(err); });
-      })();
-
-      renderFromJson(".campaign-grid", function (c) {
-        var tags = c.tags.map(function (t) { return "<span>" + escapeHtml(t) + "</span>"; }).join("");
-        return (
-          '<a class="campaign-card ' + escapeHtml(c.theme) + '">' +
-            '<div class="campaign-banner">' +
-              '<span class="campaign-live"><span class="live-dot" aria-hidden="true"></span>Live</span>' +
-              '<span class="brand-logo">' + escapeHtml(c.brandInitials) + "</span>" +
-              "<div>" +
-                "<strong>" + escapeHtml(c.title) + "</strong>" +
-                "<span>" + escapeHtml(c.brandName) + "</span>" +
-              "</div>" +
-            "</div>" +
-            '<div class="campaign-body">' +
-              "<p>" + escapeHtml(c.description) + "</p>" +
-              '<div class="campaign-tags">' + tags + "</div>" +
-              '<div class="campaign-meta-row">' +
-                "<div>" +
-                  '<span class="budget-label">Budget</span>' +
-                  '<span class="budget-amount">' + escapeHtml(c.budget) + "</span>" +
-                "</div>" +
-                '<div class="campaign-meta-right">' +
-                  '<span class="campaign-days-left">' + escapeHtml(c.daysLeft) + "</span>" +
-                  '<span class="applied-pill">' + escapeHtml(c.applied) + "</span>" +
-                "</div>" +
-              "</div>" +
-            "</div>" +
-          "</a>"
-        );
-      });
-    })();
-  </script>
 </body>
 </html>

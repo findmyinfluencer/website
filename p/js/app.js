@@ -1,10 +1,18 @@
 (function () {
   "use strict";
 
-  // Creator profile page. Fetches /api/influencer-detail.php?slug=<slug>
+  // Creator profile page. Fetches <apiBase>/influencer-detail.php?slug=<slug>
   // and fills the data-field/data-creator-section hooks in index.html. This
   // page serves only from p/ — no dependency on website/js/main.js or
-  // website/css, so escapeHtml is a local copy, not a shared import.
+  // website/css, so escapeHtml and the local/production apiBase switch
+  // below are local copies, not shared imports.
+  //
+  // from the current hostname so this page's API calls route correctly in
+  // both dev and production without manually swapping a URL per
+  // environment — same convention as website/js/main.js's apiBase.
+  var isLocalHost = /^(localhost|127\.0\.0\.1)$/.test(window.location.hostname);
+  var apiBase = isLocalHost ? "http://localhost/api" : "https://api.findmyinfluencer.com";
+
   function escapeHtml(value) {
     return String(value).replace(/[&<>"']/g, function (ch) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
@@ -31,7 +39,7 @@
   }
 
   var slug = resolveSlug();
-  var source = slug ? "/api/influencer-detail.php?slug=" + encodeURIComponent(slug) : null;
+  var source = slug ? apiBase + "/influencer-detail.php?slug=" + encodeURIComponent(slug) : null;
   var loadingEl = document.querySelector("[data-creator-loading]");
 
   if (!source) {

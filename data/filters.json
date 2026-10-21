@@ -86,7 +86,8 @@
     "50": "Port Blair",
     "51": "Daman",
     "52": "Leh",
-    "53": "Kavaratti"
+    "53": "Kavaratti",
+    "54": "Kadapa"
   },
   "languages": {
     "1": "Bengali",
@@ -135,7 +136,8 @@
   "statuses": {
     "1": "Top Rated",
     "2": "Verified",
-    "3": "Featured"
+    "3": "Featured",
+    "4": "Spotlight"
   },
   "states": {
     "1": "Chandigarh",

@@ -1140,6 +1140,7 @@
 .influencer-reach .fa-pinterest { color: #e60023; }
 .influencer-reach .fa-snapchat { color: #d8d500; font-weight: 800; }
 .influencer-reach .fa-twitter { color: #1da1f2; }
+.influencer-reach .fa-threads { color: #000000; }
 
 .influencer-stats-row {
   display: flex;

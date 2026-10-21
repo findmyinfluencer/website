@@ -542,6 +542,7 @@ button { font-family: inherit; cursor: pointer; }
 .p-snapchat .platform-card-link:hover { color: var(--ink); }
 .p-twitter .platform-card-link { background: #1da1f2; }
 .p-pinterest .platform-card-link { background: #e60023; }
+.p-threads .platform-card-link { background: #000000; }
 
 .platform-card .stat-band { margin-bottom: 24px; }
 
@@ -586,6 +587,7 @@ button { font-family: inherit; cursor: pointer; }
 .p-snapchat .social-icon { background: #fffc00; color: var(--ink); }
 .p-twitter .social-icon { background: #1da1f2; }
 .p-pinterest .social-icon { background: #e60023; }
+.p-threads .social-icon { background: #000000; }
 
 .social-text { flex: 1; min-width: 0; }
 /* ---- Contact list ---- */

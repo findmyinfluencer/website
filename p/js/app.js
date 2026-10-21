@@ -54,7 +54,8 @@
     linkedin: "fa-linkedin-in",
     snapchat: "fa-snapchat",
     twitter: "fa-twitter",
-    pinterest: "fa-pinterest"
+    pinterest: "fa-pinterest",
+    threads: "fa-threads"
   };
 
   // Category/budget/language/gender/age — profile-level facts from the

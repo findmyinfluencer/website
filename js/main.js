@@ -513,7 +513,7 @@
           '<div class="influencer-avatar">' + escapeHtml(inf.avatarInitials) + "</div>" +
           '<div class="influencer-body">' +
             "<h3>" + escapeHtml(inf.name) + "</h3>" +
-            '<p class="influencer-handle">' + escapeHtml(inf.handle) + "</p>" +
+            '<p class="influencer-handle">' + escapeHtml(inf.slug) + "</p>" +
             '<span class="influencer-pill">' + escapeHtml(inf.category) + "</span>" +
             '<div class="influencer-reach"><i class="fa-brands fa-' + escapeHtml(inf.platform) + '" aria-hidden="true"></i><strong>' + escapeHtml(inf.followers) + "</strong><span class=\"visually-hidden\">" + escapeHtml(inf.platform) + " followers</span></div>" +
             '<div class="influencer-stats-row">' +
